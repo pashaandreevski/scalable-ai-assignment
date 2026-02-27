@@ -150,6 +150,22 @@ tr:hover { background: var(--sc-light-grey); }
 .segment-card .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: rgba(8,150,136,0.1); color: var(--sc-emerald); margin-right: 6px; margin-bottom: 4px; }
 .selected-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: var(--sc-emerald); color: white; margin-left: 8px; vertical-align: middle; }
 
+/* PASSWORD GATE */
+.pw-overlay { position: fixed; inset: 0; z-index: 9999; background: var(--sc-white); display: flex; align-items: center; justify-content: center; transition: opacity 0.4s; }
+.pw-overlay.hidden { opacity: 0; pointer-events: none; }
+.pw-box { background: var(--sc-white); border: 1px solid var(--sc-border); border-radius: 16px; padding: 40px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+.pw-box h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: var(--sc-dark-base); }
+.pw-box p { font-size: 13px; color: var(--sc-medium-grey); margin-bottom: 24px; line-height: 1.5; }
+.pw-box .pw-lock { font-size: 32px; margin-bottom: 16px; }
+.pw-input-row { display: flex; gap: 8px; }
+.pw-input-row input { flex: 1; background: var(--sc-light-grey); border: 1px solid var(--sc-border); border-radius: 8px; padding: 12px 16px; color: var(--sc-dark-base); font-family: var(--sc-font); font-size: 14px; outline: none; }
+.pw-input-row input:focus { border-color: var(--sc-emerald); }
+.pw-input-row button { background: var(--sc-emerald); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--sc-font); }
+.pw-input-row button:hover { background: var(--sc-emerald-accent); }
+.pw-error { color: var(--sc-error); font-size: 12px; margin-top: 12px; display: none; }
+.pw-error.show { display: block; }
+.pw-hint { font-size: 11px; color: var(--sc-medium-grey); margin-top: 16px; }
+
 /* FOOTER */
 footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--sc-medium-grey); border-top: 1px solid var(--sc-border); }
 
@@ -166,6 +182,21 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
 </style>
 </head>
 <body>
+
+<!-- PASSWORD GATE -->
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-box">
+    <div class="pw-lock">🔒</div>
+    <h2>Scalable Capital AI Platform PM</h2>
+    <p>This test assignment is password-protected.<br>Enter the access code shared with you to continue.</p>
+    <div class="pw-input-row">
+      <input type="password" id="pwInput" placeholder="Access code" onkeydown="if(event.key==='Enter')unlockPage()">
+      <button onclick="unlockPage()">Unlock</button>
+    </div>
+    <div class="pw-error" id="pwError">Incorrect access code. Please try again.</div>
+    <div class="pw-hint">Pavel Andreyeuski &middot; February 2026</div>
+  </div>
+</div>
 
 <nav>
   <div class="nav-inner">
@@ -622,6 +653,47 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
 </footer>
 
 <script>
+// Password gate (shared verification token with demo.html)
+const ENCRYPTED_VERIFY = 'Is3lUgXd6gFeJtcpeqf1ZhJYlf2YcWGxIEgqXe7PoQUymcHNvJ7dJmeBK89X6asgen0lbgqTyiOotQHdYKvUqzdU';
+
+async function decryptAES(encB64, password) {
+  const raw = Uint8Array.from(atob(encB64), c => c.charCodeAt(0));
+  const salt = raw.slice(0, 16);
+  const iv = raw.slice(16, 28);
+  const payload = raw.slice(28);
+  const keyMaterial = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' }, keyMaterial, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  const dec = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, payload);
+  return new TextDecoder().decode(dec);
+}
+
+async function unlockPage() {
+  const pw = document.getElementById('pwInput').value;
+  if (!pw) return;
+  try {
+    await decryptAES(ENCRYPTED_VERIFY, pw);
+    sessionStorage.setItem('sc_pw', pw);
+    document.getElementById('pwOverlay').classList.add('hidden');
+  } catch (e) {
+    document.getElementById('pwError').classList.add('show');
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+(async function checkSession() {
+  const saved = sessionStorage.getItem('sc_pw');
+  if (saved) {
+    try {
+      await decryptAES(ENCRYPTED_VERIFY, saved);
+      document.getElementById('pwOverlay').classList.add('hidden');
+    } catch (e) {
+      sessionStorage.removeItem('sc_pw');
+    }
+  }
+  document.getElementById('pwInput').focus();
+})();
+
 window.addEventListener('scroll', () => {
   const h = document.documentElement.scrollHeight - window.innerHeight;
   const pct = h > 0 ? (window.scrollY / h) * 100 : 0;

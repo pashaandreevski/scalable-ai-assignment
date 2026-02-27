@@ -140,6 +140,22 @@ body { font-family: var(--sc-font); background: var(--sc-dark-base); color: var(
 .fallback-msg { text-align: center; padding: 24px; color: var(--sc-medium-grey); font-size: 14px; }
 .fallback-msg a { color: var(--sc-emerald-accent); }
 
+/* PASSWORD GATE */
+.pw-overlay { position: fixed; inset: 0; z-index: 9999; background: var(--sc-dark-base); display: flex; align-items: center; justify-content: center; transition: opacity 0.4s; }
+.pw-overlay.hidden { opacity: 0; pointer-events: none; }
+.pw-box { background: var(--sc-dark-surface); border: 1px solid var(--sc-dark-elevated); border-radius: 16px; padding: 40px; max-width: 400px; width: 90%; text-align: center; }
+.pw-box h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.pw-box p { font-size: 13px; color: var(--sc-medium-grey); margin-bottom: 24px; line-height: 1.5; }
+.pw-box .pw-lock { font-size: 32px; margin-bottom: 16px; }
+.pw-input-row { display: flex; gap: 8px; }
+.pw-input-row input { flex: 1; background: var(--sc-dark-base); border: 1px solid var(--sc-dark-elevated); border-radius: 8px; padding: 12px 16px; color: var(--sc-white); font-family: var(--sc-font); font-size: 14px; outline: none; }
+.pw-input-row input:focus { border-color: var(--sc-emerald); }
+.pw-input-row button { background: var(--sc-emerald); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--sc-font); }
+.pw-input-row button:hover { background: var(--sc-emerald-accent); }
+.pw-error { color: var(--sc-error); font-size: 12px; margin-top: 12px; display: none; }
+.pw-error.show { display: block; }
+.pw-hint { font-size: 11px; color: #4B5563; margin-top: 16px; }
+
 /* FOOTER */
 .demo-footer { text-align: center; padding: 24px; font-size: 11px; color: #4B5563; border-top: 1px solid var(--sc-dark-elevated); }
 .demo-footer a { color: var(--sc-emerald-accent); text-decoration: none; }
@@ -154,6 +170,21 @@ body { font-family: var(--sc-font); background: var(--sc-dark-base); color: var(
 </style>
 </head>
 <body>
+
+<!-- PASSWORD GATE -->
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-box">
+    <div class="pw-lock">🔒</div>
+    <h2>Protected Demo</h2>
+    <p>This interactive prototype is password-protected.<br>Enter the access code shared with you to continue.</p>
+    <div class="pw-input-row">
+      <input type="password" id="pwInput" placeholder="Access code" onkeydown="if(event.key==='Enter')unlockDemo()">
+      <button onclick="unlockDemo()">Unlock</button>
+    </div>
+    <div class="pw-error" id="pwError">Incorrect access code. Please try again.</div>
+    <div class="pw-hint">API key is AES-256-GCM encrypted and only decrypted with the correct password.</div>
+  </div>
+</div>
 
 <div class="demo-header">
   <h1>Smart Support Agent <span>POC</span></h1>
@@ -498,9 +529,11 @@ function updateStepInfo() {
   document.getElementById('stepInfo').textContent = 'Step ' + Math.min(currentStep + 1, DEMO_STEPS.length) + ' of ' + DEMO_STEPS.length;
 }
 
-// ===== EXPLORE MODE (GEMINI API) =====
-const GEMINI_KEY = 'AIzaSyA9SX_hs0l0-AF5Jb4vBy0sn5HG3aym3Yc';
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + GEMINI_KEY;
+// ===== PASSWORD GATE & ENCRYPTED API KEY =====
+const ENCRYPTED_KEY = 'PS36MB+b18/aYhExHClndTYGotlpn2Qd3COF/Zf+ljUJtv027Jdx3IksTJOUX83rJZVtvXzpxo0XYFyGT6grDSQE0aXPJyS8gy73epHaIjXOfsE=';
+const ENCRYPTED_VERIFY = 'Is3lUgXd6gFeJtcpeqf1ZhJYlf2YcWGxIEgqXe7PoQUymcHNvJ7dJmeBK89X6asgen0lbgqTyiOotQHdYKvUqzdU';
+
+let GEMINI_URL = null;
 
 const SYSTEM_PROMPT = `You are the Smart Support Agent for Scalable Capital, a European neobroker and bank. You are currently assisting client Maria Schneider (spelled exactly: M-A-R-I-A S-C-H-N-E-I-D-E-R). Client ID: SC-847291, PRIME+ member since March 2024. Always address her as "Maria" (never Marla, Marie, or any other spelling).
 
@@ -519,6 +552,49 @@ Rules:
 - Keep responses under 150 words.
 - Be warm and professional, matching Scalable Capital's tone.`;
 
+async function decryptAES(encB64, password) {
+  const raw = Uint8Array.from(atob(encB64), c => c.charCodeAt(0));
+  const salt = raw.slice(0, 16);
+  const iv = raw.slice(16, 28);
+  const payload = raw.slice(28);
+  const keyMaterial = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' }, keyMaterial, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  const dec = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, payload);
+  return new TextDecoder().decode(dec);
+}
+
+async function unlockDemo() {
+  const pw = document.getElementById('pwInput').value;
+  if (!pw) return;
+  try {
+    await decryptAES(ENCRYPTED_VERIFY, pw);
+    const apiKey = await decryptAES(ENCRYPTED_KEY, pw);
+    GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + apiKey;
+    sessionStorage.setItem('sc_pw', pw);
+    document.getElementById('pwOverlay').classList.add('hidden');
+  } catch (e) {
+    document.getElementById('pwError').classList.add('show');
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+(async function checkSession() {
+  const saved = sessionStorage.getItem('sc_pw');
+  if (saved) {
+    try {
+      await decryptAES(ENCRYPTED_VERIFY, saved);
+      const apiKey = await decryptAES(ENCRYPTED_KEY, saved);
+      GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + apiKey;
+      document.getElementById('pwOverlay').classList.add('hidden');
+    } catch (e) {
+      sessionStorage.removeItem('sc_pw');
+    }
+  }
+  document.getElementById('pwInput').focus();
+})();
+
+// ===== EXPLORE MODE =====
 let exploreHistory = [];
 let exploreCount = 15;
 
@@ -532,6 +608,15 @@ async function sendExplore() {
   const input = document.getElementById('exploreInput');
   const text = input.value.trim();
   if (!text || exploreCount <= 0) return;
+
+  if (!GEMINI_URL) {
+    const msgs = document.getElementById('exploreMessages');
+    const row = document.createElement('div');
+    row.className = 'msg-row agent';
+    row.innerHTML = '<div class="msg-bubble" style="background: var(--sc-dark-elevated); border-radius: 14px 14px 14px 4px; color: var(--sc-medium-grey); font-size: 13px;">Please unlock the demo with the access code first.</div>';
+    msgs.appendChild(row);
+    return;
+  }
 
   input.value = '';
   exploreCount--;
