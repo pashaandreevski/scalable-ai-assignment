@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Platform PM — Test Assignment | Pavel Andreyeuski</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sc-emerald: #089688;
+  --sc-emerald-accent: #07D2A6;
+  --sc-emerald-light: #0AEAB0;
+  --sc-dark-base: #0B0F14;
+  --sc-dark-surface: #1A1F26;
+  --sc-dark-elevated: #252B33;
+  --sc-white: #FFFFFF;
+  --sc-light-grey: #F5F7FA;
+  --sc-medium-grey: #8A94A6;
+  --sc-border: #E2E8F0;
+  --sc-error: #E53E3E;
+  --sc-warning: #F6AD55;
+  --sc-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --sc-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --sc-radius-sm: 8px;
+  --sc-radius-md: 12px;
+  --sc-radius-lg: 16px;
+  --sc-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --sc-shadow-lg: 0 4px 12px rgba(0,0,0,0.12);
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sc-font); color: var(--sc-dark-base); background: var(--sc-white); line-height: 1.6; }
+
+/* NAV */
+nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--sc-border); }
+.nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px; }
+.nav-logo { font-weight: 700; font-size: 14px; color: var(--sc-emerald); letter-spacing: -0.3px; }
+.nav-links { display: flex; gap: 4px; flex-wrap: wrap; }
+.nav-links a { font-size: 11px; font-weight: 500; color: var(--sc-medium-grey); text-decoration: none; padding: 4px 8px; border-radius: 6px; transition: all 0.2s; white-space: nowrap; }
+.nav-links a:hover, .nav-links a.active { color: var(--sc-emerald); background: rgba(8,150,136,0.08); }
+.progress-bar { height: 2px; background: var(--sc-emerald-accent); width: 0%; transition: width 0.3s; position: absolute; bottom: 0; left: 0; }
+
+/* SECTIONS */
+section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+section:nth-child(even of section) { background: var(--sc-light-grey); max-width: 100%; }
+section:nth-child(even of section) > .section-inner { max-width: 900px; margin: 0 auto; }
+.section-label { font-size: 12px; font-weight: 600; color: var(--sc-emerald); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+h1 { font-size: 48px; font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 20px; }
+h2 { font-size: 32px; font-weight: 700; line-height: 1.2; letter-spacing: -0.8px; margin-bottom: 16px; }
+h3 { font-size: 20px; font-weight: 600; line-height: 1.3; margin-bottom: 12px; }
+p { margin-bottom: 16px; color: #374151; }
+.lead { font-size: 18px; color: var(--sc-medium-grey); margin-bottom: 32px; }
+.bold-summary { font-size: 18px; font-weight: 600; color: var(--sc-dark-base); margin-bottom: 24px; line-height: 1.5; border-left: 3px solid var(--sc-emerald); padding-left: 16px; }
+
+/* COVER */
+#cover { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; padding-top: 40px; }
+#cover h1 span { background: linear-gradient(135deg, var(--sc-emerald), var(--sc-emerald-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.cover-meta { display: flex; gap: 24px; align-items: center; margin-top: 32px; flex-wrap: wrap; }
+.cover-meta span { font-size: 14px; color: var(--sc-medium-grey); }
+.cover-meta .badge { background: rgba(8,150,136,0.1); color: var(--sc-emerald); padding: 4px 12px; border-radius: 20px; font-weight: 500; }
+
+/* CARDS */
+.card { background: var(--sc-white); border: 1px solid var(--sc-border); border-radius: var(--sc-radius-md); padding: 24px; margin-bottom: 16px; box-shadow: var(--sc-shadow); }
+.card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+.card h3 { font-size: 16px; margin-bottom: 8px; }
+.card p { font-size: 14px; margin-bottom: 8px; }
+.card .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: rgba(8,150,136,0.1); color: var(--sc-emerald); margin-right: 4px; margin-bottom: 4px; }
+
+/* BEFORE/AFTER */
+.comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 32px 0; }
+.comparison-box { border-radius: var(--sc-radius-md); padding: 24px; position: relative; }
+.comparison-box.before { background: #F3F4F6; border: 1px solid #D1D5DB; }
+.comparison-box.after { background: var(--sc-dark-base); color: var(--sc-white); border: 2px solid var(--sc-emerald); }
+.comparison-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.comparison-box.before .comparison-label { color: var(--sc-medium-grey); }
+.comparison-box.after .comparison-label { color: var(--sc-emerald-accent); }
+.comparison-box .msg { font-size: 14px; line-height: 1.6; }
+.comparison-box.before .msg { color: #6B7280; }
+.comparison-box .link-fake { color: var(--sc-emerald); text-decoration: underline; font-size: 13px; }
+
+/* MATURITY */
+.maturity { display: flex; gap: 0; margin: 32px 0; }
+.maturity-step { flex: 1; padding: 16px; text-align: center; border: 1px solid var(--sc-border); position: relative; }
+.maturity-step:first-child { border-radius: var(--sc-radius-sm) 0 0 var(--sc-radius-sm); }
+.maturity-step:last-child { border-radius: 0 var(--sc-radius-sm) var(--sc-radius-sm) 0; }
+.maturity-step .level { font-size: 11px; font-weight: 700; color: var(--sc-medium-grey); text-transform: uppercase; letter-spacing: 1px; }
+.maturity-step .level-name { font-size: 13px; font-weight: 600; margin-top: 4px; }
+.maturity-step.current { background: rgba(8,150,136,0.08); border-color: var(--sc-emerald); }
+.maturity-step.target { background: var(--sc-emerald); color: white; border-color: var(--sc-emerald); }
+.maturity-step.target .level { color: rgba(255,255,255,0.7); }
+.maturity-step.future { opacity: 0.5; }
+
+/* STATS */
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0; }
+.stat { text-align: center; padding: 20px; background: var(--sc-white); border-radius: var(--sc-radius-md); border: 1px solid var(--sc-border); }
+.stat .num { font-size: 36px; font-weight: 800; color: var(--sc-emerald); letter-spacing: -1px; }
+.stat .label { font-size: 12px; color: var(--sc-medium-grey); margin-top: 4px; }
+
+/* TABLE */
+table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; }
+th { text-align: left; font-weight: 600; padding: 12px 16px; border-bottom: 2px solid var(--sc-border); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--sc-medium-grey); }
+td { padding: 12px 16px; border-bottom: 1px solid var(--sc-border); }
+tr:hover { background: var(--sc-light-grey); }
+.score-high { color: var(--sc-error); font-weight: 700; }
+.score-med { color: var(--sc-warning); font-weight: 700; }
+.score-low { color: var(--sc-emerald); font-weight: 700; }
+
+/* ARCHITECTURE */
+.arch-diagram { background: var(--sc-dark-base); border-radius: var(--sc-radius-md); padding: 32px; margin: 24px 0; color: var(--sc-white); font-family: var(--sc-font-mono); font-size: 13px; line-height: 2; overflow-x: auto; }
+.arch-layer { border: 1px solid var(--sc-dark-elevated); border-radius: var(--sc-radius-sm); padding: 12px 16px; margin: 8px 0; display: flex; align-items: center; gap: 12px; }
+.arch-layer .icon { font-size: 18px; }
+.arch-layer.highlight { border-color: var(--sc-emerald); background: rgba(8,150,136,0.1); }
+
+/* JOB GRAPH */
+.job-graph { display: flex; gap: 0; margin: 32px 0; align-items: stretch; }
+.job-node { flex: 1; padding: 16px 12px; text-align: center; border: 2px solid var(--sc-border); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
+.job-node:first-child { border-radius: var(--sc-radius-sm) 0 0 var(--sc-radius-sm); }
+.job-node:last-child { border-radius: 0 var(--sc-radius-sm) var(--sc-radius-sm) 0; }
+.job-node .step-num { font-size: 11px; font-weight: 700; color: var(--sc-emerald); }
+.job-node .step-title { font-size: 12px; font-weight: 600; margin: 8px 0 4px; }
+.job-node .step-strength { font-size: 11px; color: var(--sc-medium-grey); }
+.job-node.critical { border-color: var(--sc-emerald); background: rgba(8,150,136,0.06); }
+.job-node .arrow { position: absolute; right: -10px; top: 50%; transform: translateY(-50%); color: var(--sc-medium-grey); font-size: 16px; z-index: 1; }
+
+/* CTA */
+.cta-section { text-align: center; padding: 60px 24px; }
+.btn-primary { display: inline-block; background: var(--sc-emerald); color: white; padding: 16px 40px; border-radius: var(--sc-radius-sm); font-weight: 600; font-size: 16px; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; }
+.btn-primary:hover { background: var(--sc-emerald-accent); transform: translateY(-1px); box-shadow: var(--sc-shadow-lg); }
+.btn-secondary { display: inline-block; border: 2px solid var(--sc-emerald); color: var(--sc-emerald); padding: 14px 36px; border-radius: var(--sc-radius-sm); font-weight: 600; font-size: 15px; text-decoration: none; transition: all 0.2s; margin-left: 12px; }
+.btn-secondary:hover { background: rgba(8,150,136,0.08); }
+
+/* GUARDRAIL LAYERS */
+.guardrail-stack { margin: 24px 0; }
+.guardrail-layer { display: flex; align-items: flex-start; gap: 16px; padding: 20px; border: 1px solid var(--sc-border); border-radius: var(--sc-radius-md); margin-bottom: 12px; background: var(--sc-white); }
+.guardrail-layer .layer-num { background: var(--sc-emerald); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+.guardrail-layer h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.guardrail-layer p { font-size: 13px; color: #6B7280; margin: 0; }
+
+/* TIMELINE */
+.timeline { margin: 24px 0; }
+.timeline-item { display: flex; gap: 16px; padding: 20px 0; border-left: 2px solid var(--sc-border); padding-left: 24px; position: relative; }
+.timeline-item::before { content: ''; position: absolute; left: -6px; top: 24px; width: 10px; height: 10px; border-radius: 50%; background: var(--sc-emerald); border: 2px solid var(--sc-white); }
+.timeline-item .time { font-size: 12px; font-weight: 600; color: var(--sc-emerald); min-width: 80px; }
+
+/* SEGMENT CARD */
+.segment-card { border-left: 3px solid var(--sc-emerald); padding-left: 16px; margin-bottom: 20px; }
+.segment-card.selected { border-left-color: var(--sc-emerald-accent); background: rgba(8,150,136,0.04); padding: 16px; border-radius: 0 var(--sc-radius-sm) var(--sc-radius-sm) 0; }
+.segment-card h4 { font-size: 15px; font-weight: 600; }
+.segment-card .jobs { font-size: 13px; color: #6B7280; margin-top: 4px; }
+.segment-card .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: rgba(8,150,136,0.1); color: var(--sc-emerald); margin-right: 6px; margin-bottom: 4px; }
+.selected-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: var(--sc-emerald); color: white; margin-left: 8px; vertical-align: middle; }
+
+/* FOOTER */
+footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--sc-medium-grey); border-top: 1px solid var(--sc-border); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  h1 { font-size: 32px; }
+  h2 { font-size: 24px; }
+  .comparison, .card-grid, .stats-row { grid-template-columns: 1fr; }
+  .maturity, .job-graph { flex-direction: column; }
+  .maturity-step:first-child, .maturity-step:last-child, .job-node:first-child, .job-node:last-child { border-radius: var(--sc-radius-sm); }
+  .nav-links { display: none; }
+  section { padding: 48px 16px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">Scalable Capital &middot; AI Platform PM</div>
+    <div class="nav-links">
+      <a href="#gap">The Gap</a>
+      <a href="#opportunity">Opportunity</a>
+      <a href="#users">Users</a>
+      <a href="#jobs">Jobs</a>
+      <a href="#risks">Risks</a>
+      <a href="#idea">The Idea</a>
+      <a href="#evaluation">Evaluation</a>
+      <a href="#guardrails">Guardrails</a>
+      <a href="#roadmap">Roadmap</a>
+    </div>
+  </div>
+  <div class="progress-bar" id="progressBar"></div>
+</nav>
+
+<!-- 1. COVER -->
+<section id="cover">
+  <div class="section-label">Test Assignment &middot; Task 1 & 2</div>
+  <h1>Smart Support Agent:<br><span>From FAQ Bot to Client-Aware Copilot</span></h1>
+  <p class="lead">An AI-powered support agent that knows your clients, diagnoses their issues, and takes action — with full compliance traceability.</p>
+  <div class="cover-meta">
+    <span class="badge">Pavel Andreyeuski</span>
+    <span>AI Platform PM Candidate</span>
+    <span>&middot;</span>
+    <span>~8 min read</span>
+    <span>&middot;</span>
+    <span>February 2026</span>
+  </div>
+  <div style="margin-top: 40px;">
+    <a href="#gap" class="btn-primary">Start Reading</a>
+    <a href="demo.html" class="btn-secondary">Jump to Live Demo &rarr;</a>
+  </div>
+</section>
+
+<!-- 2. THE GAP -->
+<section id="gap" style="background: var(--sc-light-grey); max-width: 100%;">
+  <div class="section-inner" style="max-width: 900px; margin: 0 auto;">
+    <div class="section-label">The Gap</div>
+    <h2>Same question. Two very different experiences.</h2>
+    <p class="bold-summary">The current support chat sends FAQ links. The proposed agent accesses the client's account, diagnoses the problem, and fixes it — in under a minute.</p>
+
+    <div class="comparison">
+      <div class="comparison-box before">
+        <div class="comparison-label">Today &middot; FAQ Bot</div>
+        <div class="msg" style="margin-bottom: 12px; font-weight: 500;">Client: "Why did my savings plan not execute this month?"</div>
+        <div class="msg">Bot: "Here are some articles that might help:"</div>
+        <div style="margin-top: 8px;">
+          <span class="link-fake">How savings plans work</span><br>
+          <span class="link-fake">Troubleshooting failed orders</span><br>
+          <span class="link-fake">Managing your cash balance</span>
+        </div>
+        <div class="msg" style="margin-top: 12px; font-style: italic; color: #9CA3AF;">If this didn't help, I'll connect you to a support agent. Average wait: ~4 hours.</div>
+      </div>
+      <div class="comparison-box after">
+        <div class="comparison-label">Proposed &middot; Smart Agent</div>
+        <div class="msg" style="margin-bottom: 12px; font-weight: 500; color: #D1D5DB;">Client: "Why did my savings plan not execute this month?"</div>
+        <div class="msg">Hi Maria! I checked your <strong style="color: var(--sc-emerald-accent);">MSCI World ETF savings plan</strong> (€200/month, scheduled for Feb 15).</div>
+        <div class="msg" style="margin-top: 8px;">It didn't execute because your cash balance was <strong style="color: var(--sc-emerald-accent);">€142.30</strong> at the time — <strong>€57.70 short</strong>.</div>
+        <div class="msg" style="margin-top: 8px;">I can help you fix this:</div>
+        <div style="margin-top: 8px; font-size: 13px;">
+          <span style="background: var(--sc-dark-elevated); padding: 4px 10px; border-radius: 6px; margin-right: 4px;">Reschedule to Mar 1</span>
+          <span style="background: var(--sc-dark-elevated); padding: 4px 10px; border-radius: 6px; margin-right: 4px;">Adjust to €140</span>
+          <span style="background: var(--sc-dark-elevated); padding: 4px 10px; border-radius: 6px;">Add funds</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. THE OPPORTUNITY -->
+<section id="opportunity">
+  <div class="section-label">The Opportunity</div>
+  <h2>The industry has moved. It's time to catch up — and leap ahead.</h2>
+  <p class="bold-summary">93% of fintech support teams are investing in AI agents. The best-in-class achieve 85%+ resolution rates. Scalable is at 70% with an FAQ bot. The gap is an opportunity worth millions annually.</p>
+
+  <div class="stats-row">
+    <div class="stat">
+      <div class="num">70%</div>
+      <div class="label">Scalable's current<br>AI resolution rate</div>
+    </div>
+    <div class="stat">
+      <div class="num">85%+</div>
+      <div class="label">Industry best<br>(with context + actions)</div>
+    </div>
+    <div class="stat">
+      <div class="num">€6.60</div>
+      <div class="label">Avg. cost per<br>human resolution</div>
+    </div>
+  </div>
+
+  <h3>Support AI Maturity Curve</h3>
+  <p>Based on <a href="https://fin.ai/blueprint/introducing-ai-agents" style="color: var(--sc-emerald);">Intercom's AI Agent Blueprint</a> and fintech benchmarks:</p>
+  <div class="maturity">
+    <div class="maturity-step current">
+      <div class="level">Level 1-2</div>
+      <div class="level-name">FAQ + Basic Context</div>
+      <div style="font-size: 11px; color: var(--sc-medium-grey); margin-top: 4px;">Scalable today</div>
+    </div>
+    <div class="maturity-step target">
+      <div class="level">Level 3</div>
+      <div class="level-name">Task Execution</div>
+      <div style="font-size: 11px; margin-top: 4px; opacity: 0.8;">This proposal</div>
+    </div>
+    <div class="maturity-step future">
+      <div class="level">Level 4</div>
+      <div class="level-name">Proactive Support</div>
+      <div style="font-size: 11px; color: var(--sc-medium-grey); margin-top: 4px;">Future horizon</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 24px;">
+    <h3>Fintech proof points</h3>
+    <p style="font-size: 14px;"><strong>Fundrise</strong> (2M+ users, regulated investment platform): Resolved 50%+ of support volume with AI in 3 months.<br>
+    <strong>Sharesies</strong> (NZ neobroker): 90% self-service rate with AI + help center.<br>
+    <strong>MONY Group</strong> (UK insurance): Personalized support at scale across all channels.<br>
+    <em style="color: var(--sc-medium-grey);">Source: Intercom 2025 Fintech Customer Service Transformation Report</em></p>
+  </div>
+</section>
+
+<!-- 4. UNDERSTANDING THE USERS -->
+<section id="users" style="background: var(--sc-light-grey); max-width: 100%;">
+  <div class="section-inner" style="max-width: 900px; margin: 0 auto;">
+    <div class="section-label">Understanding the Users</div>
+    <h2>Five segments. Five different jobs. One platform.</h2>
+    <p class="bold-summary">Using Advanced Jobs-to-be-Done (AJTBD) analysis, I identified five user segments that would benefit most from a context-aware support agent — then selected the highest-impact one for the POC.</p>
+
+    <div class="segment-card selected">
+      <h4>Segment 1: Autopilot Investor with a Broken Routine <span class="selected-badge">Selected for POC</span></h4>
+      <div class="jobs"><strong>Core Job:</strong> "When my savings plan didn't execute and I don't know why, I want to understand what happened and fix it immediately."</div>
+      <div class="jobs" style="margin-top: 4px;"><strong>Big Job:</strong> "I want my money to grow on autopilot so I can focus on my life."</div>
+      <div class="jobs" style="margin-top: 4px;"><strong>Who:</strong> Working professionals (25-45), set-and-forget investors, time-poor. ~270K users/year affected.</div>
+      <div style="margin-top: 8px;"><span class="tag">Highest escalation volume</span><span class="tag">Needs account data</span><span class="tag">Action-capable fix</span><span class="tag">Platform-reusable</span></div>
+    </div>
+
+    <div class="segment-card">
+      <h4>Segment 2: Active Trader Blocked by Execution Problem</h4>
+      <div class="jobs"><strong>Core Job:</strong> "When my order failed, I want to know why and fix it before the market moves."</div>
+      <div class="jobs" style="margin-top: 4px;"><strong>Who:</strong> Self-directed traders (30-55), PRIME+ subscribers, time-critical issues. ~90K/year.</div>
+    </div>
+
+    <div class="segment-card">
+      <h4>Segment 3: New Investor Overwhelmed by First Steps</h4>
+      <div class="jobs"><strong>Core Job:</strong> "When I'm stuck during onboarding, I want step-by-step guidance for my specific situation."</div>
+      <div class="jobs" style="margin-top: 4px;"><strong>Who:</strong> First-time investors (20-35), triggered by social media. ~120K/year during onboarding.</div>
+    </div>
+
+    <div class="segment-card">
+      <h4>Segment 4: Tax Season Client Needing Documentation</h4>
+      <div class="jobs"><strong>Core Job:</strong> "When tax season comes, I want to find and understand my tax documents without confusion."</div>
+      <div class="jobs" style="margin-top: 4px;"><strong>Who:</strong> German investors during filing season (Jan-May). Massive seasonal spike. ~400K/year.</div>
+    </div>
+
+    <div class="segment-card">
+      <h4>Segment 5: Client Considering Leaving</h4>
+      <div class="jobs"><strong>Core Job:</strong> "When I've had multiple bad experiences, I want my issue resolved properly to restore trust."</div>
+      <div class="jobs" style="margin-top: 4px;"><strong>Who:</strong> Pre-churn clients with repeat contacts. ~30K/year. Highest LTV at risk.</div>
+    </div>
+
+    <div class="card" style="margin-top: 16px;">
+      <h3>Why Segment 1 was selected</h3>
+      <p style="font-size: 14px;">This segment has the highest volume of currently-escalated requests (FAQ bot can't access savings plan data), directly maps to the "client-specific data + action execution" vision described by the team, and the client context layer built for this use case is reusable for all other segments.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. JOB GRAPH -->
+<section id="jobs">
+  <div class="section-label">The Job Graph</div>
+  <h2>How the client's journey breaks down — and where it breaks.</h2>
+  <p class="bold-summary">The core job has five sub-jobs. Today, the AI can help with zero of the three critical ones (2, 3, 4). The Smart Support Agent closes this gap entirely.</p>
+
+  <div class="job-graph">
+    <div class="job-node">
+      <div class="step-num">Sub-job 1</div>
+      <div class="step-title">Discover failure</div>
+      <div class="step-strength">Strength: 7/10</div>
+      <div class="arrow">&rarr;</div>
+    </div>
+    <div class="job-node critical">
+      <div class="step-num">Sub-job 2</div>
+      <div class="step-title">Understand why</div>
+      <div class="step-strength" style="color: var(--sc-emerald); font-weight: 600;">Strength: 9/10</div>
+      <div class="arrow">&rarr;</div>
+    </div>
+    <div class="job-node critical">
+      <div class="step-num">Sub-job 3</div>
+      <div class="step-title">Evaluate options</div>
+      <div class="step-strength" style="color: var(--sc-emerald); font-weight: 600;">Strength: 8/10</div>
+      <div class="arrow">&rarr;</div>
+    </div>
+    <div class="job-node critical">
+      <div class="step-num">Sub-job 4</div>
+      <div class="step-title">Execute the fix</div>
+      <div class="step-strength" style="color: var(--sc-emerald); font-weight: 600;">Strength: 9/10</div>
+      <div class="arrow">&rarr;</div>
+    </div>
+    <div class="job-node">
+      <div class="step-num">Sub-job 5</div>
+      <div class="step-title">Confirm resolved</div>
+      <div class="step-strength">Strength: 7/10</div>
+    </div>
+  </div>
+
+  <div class="card-grid" style="margin-top: 24px;">
+    <div class="card">
+      <h3>Sub-job 2: Understand why it failed</h3>
+      <p><strong>Problem:</strong> Current app shows generic "failed" status. FAQ bot links to articles. No one tells the client: "Your balance was €57.70 short."</p>
+      <p><strong>Solution:</strong> Agent accesses savings plan config + cash balance, delivers precise diagnosis.</p>
+    </div>
+    <div class="card">
+      <h3>Sub-job 4: Execute the fix</h3>
+      <p><strong>Problem:</strong> Fixing requires 4-5 taps through Settings > Savings Plans > Edit. Via email support: 4-24 hours wait.</p>
+      <p><strong>Solution:</strong> Agent offers options and executes with one-click confirmation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6. RISKIEST ASSUMPTIONS -->
+<section id="risks" style="background: var(--sc-light-grey); max-width: 100%;">
+  <div class="section-inner" style="max-width: 900px; margin: 0 auto;">
+    <div class="section-label">Riskiest Assumptions</div>
+    <h2>What could kill this idea — and how to test it fast.</h2>
+    <p class="bold-summary">Five assumptions scored by Probability x Impact. The two existential risks (compliance and hallucination) must be validated before significant investment. Both are addressable.</p>
+
+    <table>
+      <thead>
+        <tr><th>#</th><th>Risk</th><th>Category</th><th>P</th><th>I</th><th>Score</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><strong>Compliance approval for client data access by AI</strong><br><span style="font-size: 12px; color: var(--sc-medium-grey);">Will Legal/DPO approve portfolio data in LLM context?</span></td><td>Regulatory</td><td>3</td><td>5</td><td class="score-high">15</td></tr>
+        <tr><td>2</td><td><strong>AI hallucination in financial context</strong><br><span style="font-size: 12px; color: var(--sc-medium-grey);">Can accuracy stay below 1% hallucination rate on client data?</span></td><td>Value</td><td>3</td><td>5</td><td class="score-high">15</td></tr>
+        <tr><td>3</td><td><strong>Client trust in AI for account actions</strong><br><span style="font-size: 12px; color: var(--sc-medium-grey);">Will 40%+ of clients let AI modify their account?</span></td><td>Adoption</td><td>3</td><td>3</td><td class="score-med">9</td></tr>
+        <tr><td>4</td><td><strong>Technical latency of data retrieval</strong><br><span style="font-size: 12px; color: var(--sc-medium-grey);">Can portfolio data be retrieved in under 2 seconds?</span></td><td>Technical</td><td>2</td><td>3</td><td class="score-low">6</td></tr>
+        <tr><td>5</td><td><strong>Cannibalization of Insights feature</strong><br><span style="font-size: 12px; color: var(--sc-medium-grey);">Can support agent and Insights coexist without confusion?</span></td><td>Market</td><td>3</td><td>2</td><td class="score-low">6</td></tr>
+      </tbody>
+    </table>
+
+    <div class="card">
+      <h3>Why the top risks are addressable</h3>
+      <p style="font-size: 14px;"><strong>Compliance (Score 15):</strong> Scalable has already started feeding client-specific data to the LLM (confirmed in interview). The expansion to savings plan data is incremental, not a paradigm shift. Start with read-only access as a compliant first step.</p>
+      <p style="font-size: 14px;"><strong>Hallucination (Score 15):</strong> Unlike free-text retrieval, savings plan data is structured (amount, date, status, cash balance). Structured data injection has dramatically lower hallucination risk than unstructured RAG. Add confidence thresholds and auto-escalation as safety nets.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. THE IDEA -->
+<section id="idea">
+  <div class="section-label">The Idea</div>
+  <h2>Smart Support Agent: Architecture</h2>
+  <p class="bold-summary">Four capability layers: client knowledge, proactive diagnosis, confirmed actions, and intelligent escalation. Built as a platform service reusable across all product teams.</p>
+
+  <div class="arch-diagram">
+    <div style="text-align: center; margin-bottom: 16px; color: var(--sc-medium-grey); font-family: var(--sc-font); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">System Architecture</div>
+    <div class="arch-layer">
+      <span class="icon">👤</span>
+      <div><strong>Client</strong> — Scalable Capital app (iOS / Android / Web)</div>
+    </div>
+    <div style="text-align: center; color: var(--sc-medium-grey);">↓ chat message</div>
+    <div class="arch-layer highlight">
+      <span class="icon">🛡️</span>
+      <div><strong>Input Guardrails</strong> — Prompt injection detection · Topic classification · PII masking</div>
+    </div>
+    <div style="text-align: center; color: var(--sc-medium-grey);">↓</div>
+    <div class="arch-layer highlight">
+      <span class="icon">🧠</span>
+      <div><strong>AI Agent (LLM + Context)</strong> — System prompt + Client data (portfolio, savings plans, cash) + FAQ knowledge base</div>
+    </div>
+    <div style="text-align: center; color: var(--sc-medium-grey);">↓ proposed response + actions</div>
+    <div class="arch-layer highlight">
+      <span class="icon">✅</span>
+      <div><strong>Output Guardrails</strong> — Hallucination check · No investment advice · Confidence threshold · Disclaimers</div>
+    </div>
+    <div style="text-align: center; color: var(--sc-medium-grey);">↓</div>
+    <div class="arch-layer">
+      <span class="icon">⚡</span>
+      <div><strong>Action Engine</strong> — Allowlisted actions only · Client confirmation required · Audit trail</div>
+    </div>
+    <div style="text-align: center; color: var(--sc-medium-grey);">↓</div>
+    <div class="arch-layer">
+      <span class="icon">📊</span>
+      <div><strong>Observability</strong> — Full conversation trace · Compliance audit log · Performance dashboard</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <h3>Layer 1: Knows the Client</h3>
+      <p>Accesses portfolio positions, savings plan config, cash balance, transaction history. Data is injected as structured context, not retrieved via RAG.</p>
+    </div>
+    <div class="card">
+      <h3>Layer 2: Diagnoses Proactively</h3>
+      <p>Identifies root cause of issues by cross-referencing client data. "Your savings plan failed because your cash was €57.70 short."</p>
+    </div>
+    <div class="card">
+      <h3>Layer 3: Takes Actions</h3>
+      <p>Executes pre-approved actions (reschedule, adjust amount) with explicit client confirmation. Every action has an audit trail.</p>
+    </div>
+    <div class="card">
+      <h3>Layer 4: Escalates Intelligently</h3>
+      <p>When confidence is low or the issue is complex, hands off to human agents with full conversation context and client data summary.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 8. CTA TO DEMO -->
+<section class="cta-section" style="background: var(--sc-dark-base); color: white; max-width: 100%;">
+  <div class="section-label" style="color: var(--sc-emerald-accent);">Proof of Concept</div>
+  <h2 style="color: white;">See it in action.</h2>
+  <p style="color: var(--sc-medium-grey); max-width: 500px; margin: 0 auto 32px;">An interactive demo showing the Smart Support Agent resolving a real savings plan issue — with live compliance tracing.</p>
+  <a href="demo.html" class="btn-primary" style="font-size: 18px; padding: 18px 48px;">Try the Live Demo &rarr;</a>
+</section>
+
+<!-- 9. EVALUATION FRAMEWORK -->
+<section id="evaluation">
+  <div class="section-label">Task 2 &middot; Evaluation Framework</div>
+  <h2>How to measure AI quality before and after release.</h2>
+  <p class="bold-summary">Three evaluation layers: offline testing before release, online monitoring in production, and compliance-specific checks for regulatory adherence.</p>
+
+  <div class="card" style="margin-bottom: 16px;">
+    <h3>Layer 1: Offline Evaluation (Pre-Release)</h3>
+    <p style="font-size: 14px;"><strong>Golden test set:</strong> 500+ labeled support cases with known-correct answers. Run on every model or prompt change.</p>
+    <p style="font-size: 14px;"><strong>Metrics:</strong> Answer accuracy (F1 score), hallucination rate (% of responses with fabricated info, measured by automated fact-checking against source data), retrieval quality (RAGAS: context relevance, faithfulness, answer relevancy), action safety (% of proposed actions matching expected).</p>
+    <p style="font-size: 14px;"><strong>Methodology:</strong> Automated regression suite. Hallucination detection via structured data comparison — if the agent says "your balance is €X" but the source data says €Y, that's a flagged hallucination. Red-team testing for adversarial prompts.</p>
+  </div>
+
+  <div class="card" style="margin-bottom: 16px;">
+    <h3>Layer 2: Online Evaluation (In Production)</h3>
+    <p style="font-size: 14px;"><strong>Resolution rate:</strong> % of conversations resolved without human escalation. Current: 70%. Target: 85%.</p>
+    <p style="font-size: 14px;"><strong>CSAT:</strong> Post-conversation satisfaction (thumbs up/down + optional comment). Track per segment.</p>
+    <p style="font-size: 14px;"><strong>Action completion rate:</strong> % of AI-proposed actions that clients confirm and complete. Target: >40%.</p>
+    <p style="font-size: 14px;"><strong>Trace analysis:</strong> Weekly review of failed/escalated conversations. Identify systematic gaps — new FAQ topics, edge cases, prompt improvements needed.</p>
+  </div>
+
+  <div class="card">
+    <h3>Layer 3: Compliance-Specific Evaluation</h3>
+    <p style="font-size: 14px;"><strong>Data leakage score:</strong> Automated checks that no PII or financial data from Client A appears in Client B's conversation.</p>
+    <p style="font-size: 14px;"><strong>Regulatory boundary:</strong> % of responses correctly refusing investment advice when asked. Target: 100%. Tested with adversarial prompts ("What stocks should I buy?").</p>
+    <p style="font-size: 14px;"><strong>Bias testing:</strong> Differential response quality across user demographics (language, account size, account age). Flagged if resolution rate varies >5% between cohorts.</p>
+  </div>
+</section>
+
+<!-- 10. GUARDRAILS -->
+<section id="guardrails" style="background: var(--sc-light-grey); max-width: 100%;">
+  <div class="section-inner" style="max-width: 900px; margin: 0 auto;">
+    <div class="section-label">Task 2 &middot; Guardrails</div>
+    <h2>Four defense layers against hallucination and data leakage.</h2>
+    <p class="bold-summary">Compliance is a design constraint, not a gate at the end. Every response passes through input sanitization, processing constraints, output classification, and immutable audit logging.</p>
+
+    <div class="guardrail-stack">
+      <div class="guardrail-layer">
+        <div class="layer-num">1</div>
+        <div>
+          <h4>Input Guardrails</h4>
+          <p>Prompt injection detection (block adversarial inputs). Topic classification: route to support, investment (Insights), or reject. PII detection and masking before LLM processing. Rate limiting per session.</p>
+        </div>
+      </div>
+      <div class="guardrail-layer">
+        <div class="layer-num">2</div>
+        <div>
+          <h4>Processing Guardrails</h4>
+          <p>System prompt with hard constraints: no investment advice, no data from other clients, no actions without confirmation. Retrieval scope: model can only access data for the authenticated, consenting client. Action allowlist: only pre-approved operations (reschedule, adjust amount, escalate).</p>
+        </div>
+      </div>
+      <div class="guardrail-layer">
+        <div class="layer-num">3</div>
+        <div>
+          <h4>Output Guardrails</h4>
+          <p>Response classifier checks every output for: hallucinated financial facts, investment recommendations, cross-client data leakage. Confidence threshold: responses below 0.80 confidence trigger automatic escalation to human agent. Mandatory disclaimers on any financial topic.</p>
+        </div>
+      </div>
+      <div class="guardrail-layer">
+        <div class="layer-num">4</div>
+        <div>
+          <h4>Observability &amp; Audit</h4>
+          <p>Full conversation and decision trace logging (immutable, append-only). Real-time monitoring dashboard: hallucination spikes, escalation surges, latency anomalies. Quarterly model audit report for BaFin readiness and EU AI Act high-risk classification compliance.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. ROADMAP -->
+<section id="roadmap">
+  <div class="section-label">Implementation Roadmap</div>
+  <h2>From POC to production in three phases.</h2>
+  <p class="bold-summary">A phased approach that validates the riskiest assumptions first, then scales. Compliance review is built into every phase, not added at the end.</p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div>
+        <div class="time">Month 1-2</div>
+        <h3>Phase 1: Internal Beta</h3>
+        <p style="font-size: 14px;">Deploy to 5-10 support agents as a copilot (AI drafts responses, humans review before sending). Validate accuracy on real client cases. Measure hallucination rate on structured data. Get DPO/Legal sign-off on data access scope.</p>
+        <p style="font-size: 14px;"><strong>Exit criteria:</strong> Hallucination rate &lt;1% on golden test set. Legal approval for read-only client data access.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div>
+        <div class="time">Month 3-4</div>
+        <h3>Phase 2: Limited Client Rollout</h3>
+        <p style="font-size: 14px;">Roll out to 10% of clients (savings plan segment). AI handles diagnosis directly; actions still require human confirmation. Monitor resolution rate, CSAT, and escalation quality. A/B test against current FAQ bot.</p>
+        <p style="font-size: 14px;"><strong>Exit criteria:</strong> Resolution rate improvement of +10pp vs. control. CSAT equal or better than human-only support.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div>
+        <div class="time">Month 5-6</div>
+        <h3>Phase 3: General Availability + Actions</h3>
+        <p style="font-size: 14px;">Full rollout to all clients. Enable AI-executed actions with client confirmation (reschedule, adjust). Expand to Segment 2 (traders) and Segment 3 (onboarding). Share client context layer as platform service for other teams (Insights, fraud).</p>
+        <p style="font-size: 14px;"><strong>Exit criteria:</strong> 85% resolution rate. Action adoption >40%. Platform API consumed by at least one other product team.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12. WHY ME -->
+<section id="whyme" style="background: var(--sc-light-grey); max-width: 100%;">
+  <div class="section-inner" style="max-width: 900px; margin: 0 auto;">
+    <div class="section-label">Why Me</div>
+    <h2>I've built exactly this before.</h2>
+    <p class="bold-summary">At emnify, I took AI from zero to an internal platform capability — the same journey Scalable is starting now.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>AI Chatbot → AI Copilot</h3>
+        <p>Built a documentation chatbot (450 MAU, 92.8% confident answers, €21K/month value). Evolved it into a context-aware AI Copilot with profile data access and action execution — 93% reduction in diagnosis time.</p>
+      </div>
+      <div class="card">
+        <h3>Platform PM for Internal Teams</h3>
+        <p>Became the internal AI platform PM. Built shared capabilities that product teams consumed as a service. 90% of PMs integrated AI into their workflows. Exactly the "AI as a Platform" model Scalable needs.</p>
+      </div>
+      <div class="card">
+        <h3>Compliance-First Building</h3>
+        <p>Built KYB/AML compliance products at Kontur (RegTech). At emnify, worked with DPO on AI data governance in telecom (BEREC-regulated). I bring legal/compliance into discovery, not just review.</p>
+      </div>
+      <div class="card">
+        <h3>Hands-On AI Builder</h3>
+        <p>Won an MCP hackathon in Berlin. Daily user of AI coding tools (Cursor, Claude). Built this entire test assignment — presentation, interactive demo, and live AI integration — as a demonstration of PM resourcefulness.</p>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 32px;">
+      <a href="demo.html" class="btn-primary">Try the Live Demo &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Built by Pavel Andreyeuski &middot; Scalable Capital AI Platform PM Assignment &middot; February 2026
+</footer>
+
+<script>
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = h > 0 ? (window.scrollY / h) * 100 : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  links.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Support Agent — Live Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sc-emerald: #089688;
+  --sc-emerald-accent: #07D2A6;
+  --sc-emerald-light: #0AEAB0;
+  --sc-dark-base: #0B0F14;
+  --sc-dark-surface: #1A1F26;
+  --sc-dark-elevated: #252B33;
+  --sc-white: #FFFFFF;
+  --sc-light-grey: #F5F7FA;
+  --sc-medium-grey: #8A94A6;
+  --sc-border: #E2E8F0;
+  --sc-error: #E53E3E;
+  --sc-warning: #F6AD55;
+  --sc-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --sc-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--sc-font); background: var(--sc-dark-base); color: var(--sc-white); min-height: 100vh; }
+
+/* HEADER */
+.demo-header { padding: 16px 24px; border-bottom: 1px solid var(--sc-dark-elevated); display: flex; align-items: center; justify-content: space-between; }
+.demo-header h1 { font-size: 16px; font-weight: 600; }
+.demo-header h1 span { color: var(--sc-emerald-accent); }
+.demo-header a { color: var(--sc-medium-grey); font-size: 13px; text-decoration: none; }
+.demo-header a:hover { color: var(--sc-emerald-accent); }
+
+/* BEFORE/AFTER */
+.ba-section { padding: 32px 24px; max-width: 1000px; margin: 0 auto; }
+.ba-section h2 { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
+.ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ba-box { border-radius: 12px; padding: 20px; font-size: 13px; line-height: 1.6; }
+.ba-box.before { background: var(--sc-dark-surface); border: 1px solid var(--sc-dark-elevated); }
+.ba-box.after { background: var(--sc-dark-surface); border: 2px solid var(--sc-emerald); }
+.ba-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+.ba-box.before .ba-label { color: var(--sc-medium-grey); }
+.ba-box.after .ba-label { color: var(--sc-emerald-accent); }
+.ba-box .user-msg { color: #D1D5DB; margin-bottom: 8px; }
+.ba-box .bot-msg { color: var(--sc-medium-grey); }
+.ba-box.after .bot-msg { color: #E5E7EB; }
+.ba-link { color: var(--sc-emerald); font-size: 12px; }
+
+/* DEMO CONTAINER */
+.demo-section { padding: 24px; max-width: 1100px; margin: 0 auto; }
+.demo-section h2 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+.demo-section .subtitle { font-size: 13px; color: var(--sc-medium-grey); margin-bottom: 16px; }
+.demo-layout { display: grid; grid-template-columns: 260px 1fr 300px; gap: 16px; height: 520px; }
+
+/* CLIENT PANEL */
+.client-panel { background: var(--sc-dark-surface); border-radius: 12px; padding: 16px; overflow-y: auto; border: 1px solid var(--sc-dark-elevated); }
+.client-panel h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--sc-emerald-accent); margin-bottom: 12px; }
+.client-info { margin-bottom: 16px; }
+.client-info .name { font-size: 15px; font-weight: 600; }
+.client-info .detail { font-size: 12px; color: var(--sc-medium-grey); margin-top: 2px; }
+.data-block { margin-bottom: 14px; }
+.data-block .data-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--sc-medium-grey); margin-bottom: 6px; }
+.data-row { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.data-row .val { font-weight: 600; }
+.data-row .val.positive { color: var(--sc-emerald-accent); }
+.data-row .val.negative { color: var(--sc-error); }
+.data-row .val.warning { color: var(--sc-warning); }
+.savings-status { display: inline-block; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 4px; }
+.savings-status.active { background: rgba(7,210,166,0.15); color: var(--sc-emerald-accent); }
+.savings-status.failed { background: rgba(229,62,62,0.15); color: var(--sc-error); }
+
+/* CHAT */
+.chat-panel { background: var(--sc-dark-surface); border-radius: 12px; display: flex; flex-direction: column; border: 1px solid var(--sc-dark-elevated); overflow: hidden; }
+.chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.msg-row { display: flex; gap: 8px; align-items: flex-end; }
+.msg-row.user { justify-content: flex-end; }
+.msg-bubble { max-width: 80%; padding: 10px 14px; font-size: 13px; line-height: 1.5; }
+.msg-row.agent .msg-bubble { background: var(--sc-dark-elevated); border-radius: 14px 14px 14px 4px; color: #E5E7EB; }
+.msg-row.user .msg-bubble { background: var(--sc-emerald); border-radius: 14px 14px 4px 14px; color: white; }
+.msg-label { font-size: 10px; color: var(--sc-medium-grey); margin-bottom: 2px; }
+.sub-job-tag { font-size: 9px; font-weight: 600; color: var(--sc-emerald-accent); background: rgba(7,210,166,0.1); padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; }
+.typing-indicator { display: flex; gap: 4px; padding: 10px 14px; background: var(--sc-dark-elevated); border-radius: 14px 14px 14px 4px; width: fit-content; }
+.typing-indicator span { width: 6px; height: 6px; border-radius: 50%; background: var(--sc-medium-grey); animation: typeBounce 1.4s infinite; }
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typeBounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-4px); } }
+.action-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.action-btn { background: var(--sc-dark-base); border: 1px solid var(--sc-emerald); color: var(--sc-emerald-accent); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: var(--sc-font); }
+.action-btn:hover { background: rgba(8,150,136,0.15); }
+.action-btn.selected { background: var(--sc-emerald); color: white; }
+
+/* CHAT INPUT */
+.chat-input-area { padding: 12px 16px; border-top: 1px solid var(--sc-dark-elevated); display: flex; gap: 8px; }
+.chat-input-area .next-btn { background: var(--sc-emerald); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: var(--sc-font); white-space: nowrap; }
+.chat-input-area .next-btn:hover { background: var(--sc-emerald-accent); }
+.chat-input-area .next-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.chat-input-area .step-info { font-size: 11px; color: var(--sc-medium-grey); display: flex; align-items: center; }
+
+/* TRACE PANEL */
+.trace-panel { background: var(--sc-dark-surface); border-radius: 12px; padding: 16px; overflow-y: auto; border: 1px solid var(--sc-dark-elevated); font-family: var(--sc-font-mono); }
+.trace-panel h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--sc-emerald-accent); margin-bottom: 12px; font-family: var(--sc-font); }
+.trace-entry { font-size: 11px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); line-height: 1.5; color: var(--sc-medium-grey); opacity: 0; animation: traceIn 0.3s forwards; }
+@keyframes traceIn { to { opacity: 1; } }
+.trace-entry .trace-time { color: #4B5563; }
+.trace-entry .trace-ok { color: var(--sc-emerald-accent); }
+.trace-entry .trace-data { color: #93C5FD; }
+.trace-entry .trace-action { color: var(--sc-warning); }
+
+/* METRICS CARD */
+.metrics-card { background: var(--sc-dark-surface); border: 2px solid var(--sc-emerald); border-radius: 12px; padding: 24px; margin: 24px auto; max-width: 700px; display: none; }
+.metrics-card.show { display: block; animation: fadeUp 0.5s; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.metrics-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: var(--sc-emerald-accent); }
+.metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.metric-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.metric-col.proposed h4 { color: var(--sc-emerald-accent); }
+.metric-col.current h4 { color: var(--sc-medium-grey); }
+.metric-item { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; }
+.metric-item .metric-val { font-weight: 600; }
+.metric-item .metric-val.good { color: var(--sc-emerald-accent); }
+.metric-item .metric-val.bad { color: var(--sc-medium-grey); }
+
+/* EXPLORE SECTION */
+.explore-section { padding: 32px 24px; max-width: 700px; margin: 0 auto; border-top: 1px solid var(--sc-dark-elevated); }
+.explore-section h2 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+.explore-section .subtitle { font-size: 13px; color: var(--sc-medium-grey); margin-bottom: 16px; }
+.explore-chat { background: var(--sc-dark-surface); border-radius: 12px; border: 1px solid var(--sc-dark-elevated); overflow: hidden; }
+.explore-messages { min-height: 200px; max-height: 400px; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.explore-input-area { padding: 12px 16px; border-top: 1px solid var(--sc-dark-elevated); display: flex; gap: 8px; }
+.explore-input-area input { flex: 1; background: var(--sc-dark-base); border: 1px solid var(--sc-dark-elevated); border-radius: 8px; padding: 10px 14px; color: var(--sc-white); font-family: var(--sc-font); font-size: 13px; outline: none; }
+.explore-input-area input:focus { border-color: var(--sc-emerald); }
+.explore-input-area button { background: var(--sc-emerald); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--sc-font); }
+.explore-input-area button:disabled { opacity: 0.4; cursor: not-allowed; }
+.suggestion-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.suggestion-chip { background: var(--sc-dark-elevated); border: 1px solid var(--sc-dark-elevated); color: #D1D5DB; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: all 0.2s; font-family: var(--sc-font); }
+.suggestion-chip:hover { border-color: var(--sc-emerald); color: var(--sc-emerald-accent); }
+.explore-counter { font-size: 11px; color: var(--sc-medium-grey); text-align: center; margin-top: 8px; }
+.explore-note { font-size: 11px; color: var(--sc-medium-grey); text-align: center; margin-top: 8px; font-style: italic; }
+.fallback-msg { text-align: center; padding: 24px; color: var(--sc-medium-grey); font-size: 14px; }
+.fallback-msg a { color: var(--sc-emerald-accent); }
+
+/* FOOTER */
+.demo-footer { text-align: center; padding: 24px; font-size: 11px; color: #4B5563; border-top: 1px solid var(--sc-dark-elevated); }
+.demo-footer a { color: var(--sc-emerald-accent); text-decoration: none; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .demo-layout { grid-template-columns: 1fr; height: auto; }
+  .client-panel { display: none; }
+  .trace-panel { max-height: 200px; }
+  .ba-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="demo-header">
+  <h1>Smart Support Agent <span>POC</span></h1>
+  <a href="index.html">&larr; Back to Presentation</a>
+</div>
+
+<!-- BEFORE/AFTER -->
+<div class="ba-section">
+  <h2>The difference at a glance</h2>
+  <div class="ba-grid">
+    <div class="ba-box before">
+      <div class="ba-label">Today &middot; FAQ Bot</div>
+      <div class="user-msg"><strong>Client:</strong> "Why did my savings plan not execute?"</div>
+      <div class="bot-msg">Here are some articles that might help:<br>
+        <span class="ba-link">How savings plans work</span><br>
+        <span class="ba-link">Troubleshooting failed orders</span><br>
+        <span class="ba-link">Managing your cash balance</span><br>
+        <span style="font-style: italic; font-size: 11px;">Still need help? I'll connect you to an agent. Wait time: ~4 hours.</span>
+      </div>
+    </div>
+    <div class="ba-box after">
+      <div class="ba-label">Proposed &middot; Smart Agent</div>
+      <div class="user-msg"><strong>Client:</strong> "Why did my savings plan not execute?"</div>
+      <div class="bot-msg">Hi Maria! Your <strong style="color: var(--sc-emerald-accent);">MSCI World ETF</strong> savings plan (€200/month) was scheduled for Feb 15 but didn't execute.<br><br>
+        Reason: your cash balance was <strong style="color: var(--sc-emerald-accent);">€142.30</strong> — <strong>€57.70 short</strong>.<br><br>
+        <span style="font-size: 12px;">Options: <span style="background: rgba(8,150,136,0.2); padding: 2px 6px; border-radius: 4px;">Reschedule to Mar 1</span> &middot; <span style="background: rgba(8,150,136,0.2); padding: 2px 6px; border-radius: 4px;">Adjust to €140</span> &middot; <span style="background: rgba(8,150,136,0.2); padding: 2px 6px; border-radius: 4px;">Add funds</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GUIDED DEMO -->
+<div class="demo-section">
+  <h2>Guided Demo</h2>
+  <div class="subtitle">Click "Next" to step through the conversation. Each step maps to a sub-job from the AJTBD job graph.</div>
+
+  <div class="demo-layout">
+    <!-- Client Panel -->
+    <div class="client-panel">
+      <h3>Client Context</h3>
+      <div class="client-info">
+        <div class="name">Maria Schneider</div>
+        <div class="detail">PRIME+ Member &middot; Since Mar 2024</div>
+        <div class="detail">Client ID: SC-847291</div>
+      </div>
+
+      <div class="data-block">
+        <div class="data-label">Portfolio</div>
+        <div class="data-row"><span>iShares MSCI World</span><span class="val positive">€12,450</span></div>
+        <div class="data-row"><span>Xtrackers MSCI EM</span><span class="val positive">€3,820</span></div>
+        <div class="data-row"><span>Scalable World ETF</span><span class="val positive">€1,200</span></div>
+        <div class="data-row" style="font-weight: 600; border-top: 1px solid var(--sc-dark-elevated); padding-top: 4px;"><span>Total</span><span class="val">€17,470</span></div>
+      </div>
+
+      <div class="data-block">
+        <div class="data-label">Savings Plans</div>
+        <div class="data-row"><span>MSCI World &middot; €200/mo</span><span class="savings-status failed">Failed</span></div>
+        <div class="data-row"><span>MSCI EM &middot; €50/mo</span><span class="savings-status active">Active</span></div>
+      </div>
+
+      <div class="data-block">
+        <div class="data-label">Cash Balance</div>
+        <div class="data-row"><span>Available</span><span class="val warning">€142.30</span></div>
+        <div class="data-row"><span>Feb 15 (execution)</span><span class="val negative">€142.30</span></div>
+        <div class="data-row"><span>Feb 10</span><span class="val">€192.30</span></div>
+        <div class="data-row"><span>Feb 1 (salary credit)</span><span class="val positive">€242.30</span></div>
+      </div>
+    </div>
+
+    <!-- Chat -->
+    <div class="chat-panel">
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-area">
+        <span class="step-info" id="stepInfo">Step 1 of 7</span>
+        <button class="next-btn" id="nextBtn" onclick="advanceDemo()">Next &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Trace Panel -->
+    <div class="trace-panel">
+      <h3>Compliance Trace</h3>
+      <div id="traceLog"></div>
+    </div>
+  </div>
+</div>
+
+<!-- METRICS CARD -->
+<div class="metrics-card" id="metricsCard">
+  <h3>Resolution Summary</h3>
+  <div class="metrics-grid">
+    <div class="metric-col proposed">
+      <h4>Smart Agent (This Demo)</h4>
+      <div class="metric-item"><span>Resolution time</span><span class="metric-val good">47 seconds</span></div>
+      <div class="metric-item"><span>Estimated cost</span><span class="metric-val good">€0.03</span></div>
+      <div class="metric-item"><span>Hallucinations</span><span class="metric-val good">0</span></div>
+      <div class="metric-item"><span>Guardrail violations</span><span class="metric-val good">0</span></div>
+      <div class="metric-item"><span>Actions taken</span><span class="metric-val good">1 (confirmed)</span></div>
+      <div class="metric-item"><span>Human involved</span><span class="metric-val good">No</span></div>
+    </div>
+    <div class="metric-col current">
+      <h4>Current System</h4>
+      <div class="metric-item"><span>Resolution time</span><span class="metric-val bad">~4 hours</span></div>
+      <div class="metric-item"><span>Estimated cost</span><span class="metric-val bad">€6.60</span></div>
+      <div class="metric-item"><span>Hallucinations</span><span class="metric-val bad">N/A</span></div>
+      <div class="metric-item"><span>Guardrail violations</span><span class="metric-val bad">N/A</span></div>
+      <div class="metric-item"><span>Actions taken</span><span class="metric-val bad">Manual (2 emails)</span></div>
+      <div class="metric-item"><span>Human involved</span><span class="metric-val bad">Yes (agent)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPLORE MODE -->
+<div class="explore-section" id="exploreSection">
+  <h2>Explore Mode</h2>
+  <div class="subtitle">Ask the agent anything about Maria's account. Powered by Gemini 2.0 Flash.</div>
+
+  <div class="suggestion-chips" id="suggestionChips">
+    <span class="suggestion-chip" onclick="askSuggestion(this)">What ETFs am I invested in?</span>
+    <span class="suggestion-chip" onclick="askSuggestion(this)">Can I increase my savings plan?</span>
+    <span class="suggestion-chip" onclick="askSuggestion(this)">What's my portfolio performance?</span>
+    <span class="suggestion-chip" onclick="askSuggestion(this)">When is my next savings plan execution?</span>
+  </div>
+
+  <div class="explore-chat">
+    <div class="explore-messages" id="exploreMessages">
+      <div class="msg-row agent">
+        <div class="msg-bubble" style="background: var(--sc-dark-elevated); border-radius: 14px 14px 14px 4px; color: #E5E7EB; font-size: 13px;">
+          Hi Maria! I'm your Smart Support Agent. I have access to your portfolio, savings plans, and account details. Ask me anything!
+        </div>
+      </div>
+    </div>
+    <div class="explore-input-area">
+      <input type="text" id="exploreInput" placeholder="Ask about Maria's account..." onkeydown="if(event.key==='Enter')sendExplore()">
+      <button onclick="sendExplore()" id="exploreSendBtn">Send</button>
+    </div>
+  </div>
+  <div class="explore-counter" id="exploreCounter">15 messages remaining</div>
+  <div class="explore-note">Powered by Gemini 2.5 Flash. Responses are generated in real-time and may vary.</div>
+</div>
+
+<div class="demo-footer">
+  Built by Pavel Andreyeuski &middot; Scalable Capital AI Platform PM Assignment &middot; February 2026<br>
+  <a href="index.html">Back to Presentation</a>
+</div>
+
+<script>
+// ===== SCRIPTED DEMO =====
+const DEMO_STEPS = [
+  {
+    type: 'user',
+    text: 'Why did my savings plan not execute this month?',
+    traces: [
+      { time: '09:42:01', text: '<span class="trace-ok">✓</span> Input sanitized — no injection detected' },
+      { time: '09:42:01', text: '<span class="trace-data">⬇</span> Data access: savings_plans, cash_balance for SC-847291' },
+    ],
+    subjob: null
+  },
+  {
+    type: 'agent',
+    text: 'Hi Maria! Let me check your savings plan details...',
+    traces: [
+      { time: '09:42:02', text: '<span class="trace-data">📋</span> Retrieved: MSCI World ETF plan (€200/mo, scheduled Feb 15)' },
+      { time: '09:42:02', text: '<span class="trace-data">💰</span> Retrieved: cash balance at Feb 15 = €142.30' },
+    ],
+    subjob: 'Sub-job 1: Discover what happened'
+  },
+  {
+    type: 'agent',
+    text: 'I found the issue. Your <strong>MSCI World ETF</strong> savings plan (€200/month) was scheduled for <strong>February 15</strong> but could not execute.\n\nThe reason: your available cash balance was <strong>€142.30</strong> at the time of execution — that\'s <strong>€57.70 short</strong> of the €200 needed.\n\nIt looks like a €50 withdrawal on Feb 12 reduced your balance below the required amount.',
+    traces: [
+      { time: '09:42:03', text: '<span class="trace-ok">✓</span> Guardrail: response contains no investment advice' },
+      { time: '09:42:03', text: '<span class="trace-ok">✓</span> Confidence: 0.96 (above threshold 0.80)' },
+      { time: '09:42:03', text: '<span class="trace-ok">✓</span> Fact-check: balance €142.30 matches source data' },
+    ],
+    subjob: 'Sub-job 2: Understand root cause'
+  },
+  {
+    type: 'agent',
+    text: 'Here\'s how I can help you fix this:',
+    traces: [
+      { time: '09:42:04', text: '<span class="trace-action">⚡</span> Action options generated (3 allowlisted actions)' },
+    ],
+    subjob: 'Sub-job 3: Evaluate options',
+    actions: ['Reschedule to March 1', 'Adjust plan to €140', 'I\'ll add funds myself']
+  },
+  {
+    type: 'user',
+    text: 'Reschedule to March 1',
+    traces: [
+      { time: '09:42:12', text: '<span class="trace-action">⚡</span> Action requested: RESCHEDULE_SAVINGS_PLAN' },
+      { time: '09:42:12', text: '<span class="trace-action">⚠️</span> Awaiting client confirmation...' },
+    ],
+    subjob: null,
+    isActionSelect: true
+  },
+  {
+    type: 'agent',
+    text: 'I\'ll reschedule your MSCI World ETF savings plan (€200) to execute on <strong>March 1, 2026</strong>.\n\n⚠️ <strong>Please confirm:</strong> Your cash balance should be at least €200 by March 1 for this to succeed.',
+    traces: [],
+    subjob: 'Sub-job 4: Execute the fix',
+    actions: ['✓ Confirm reschedule', 'Cancel']
+  },
+  {
+    type: 'user',
+    text: '✓ Confirm reschedule',
+    traces: [
+      { time: '09:42:18', text: '<span class="trace-ok">✓</span> Client confirmed action: RESCHEDULE' },
+      { time: '09:42:18', text: '<span class="trace-action">⚡</span> Executing: reschedule_savings_plan(plan_id=SP-4821, new_date=2026-03-01)' },
+      { time: '09:42:19', text: '<span class="trace-ok">✓</span> Action executed successfully' },
+      { time: '09:42:19', text: '<span class="trace-data">📝</span> Audit log: trace_id=TRC-20260215-001, action=RESCHEDULE, confirmed=true' },
+    ],
+    subjob: null,
+    isActionSelect: true
+  },
+  {
+    type: 'agent',
+    text: 'Done! ✅ Your MSCI World ETF savings plan is now scheduled for <strong>March 1, 2026</strong>.\n\nTo prevent this from happening again, would you like me to set up a <strong>low-balance alert</strong>? I can notify you 3 days before your savings plan executes if your cash balance is below the required amount.',
+    traces: [
+      { time: '09:42:20', text: '<span class="trace-ok">✓</span> Resolution: complete (no escalation needed)' },
+      { time: '09:42:20', text: '<span class="trace-ok">✓</span> CSAT prompt queued' },
+      { time: '09:42:20', text: '<span class="trace-data">📊</span> Session: 47s, cost €0.03, 0 hallucinations, 0 violations' },
+    ],
+    subjob: 'Sub-job 5: Confirm resolved',
+    isLast: true
+  }
+];
+
+let currentStep = 0;
+
+function addMessage(type, html, subjob) {
+  const container = document.getElementById('chatMessages');
+  const row = document.createElement('div');
+  row.className = 'msg-row ' + type;
+  row.style.opacity = '0';
+  row.style.transform = 'translateY(8px)';
+
+  let inner = '';
+  if (type === 'agent') {
+    inner += '<div><div class="msg-label">Smart Agent</div>';
+  }
+  inner += '<div class="msg-bubble">' + html.replace(/\n/g, '<br>') + '</div>';
+  if (subjob) inner += '<div class="sub-job-tag">' + subjob + '</div>';
+  if (type === 'agent') inner += '</div>';
+  row.innerHTML = inner;
+  container.appendChild(row);
+  requestAnimationFrame(() => {
+    row.style.transition = 'all 0.3s';
+    row.style.opacity = '1';
+    row.style.transform = 'translateY(0)';
+  });
+  container.scrollTop = container.scrollHeight;
+}
+
+function addTyping() {
+  const container = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'msg-row agent';
+  div.id = 'typingRow';
+  div.innerHTML = '<div><div class="msg-label">Smart Agent</div><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function removeTyping() {
+  const el = document.getElementById('typingRow');
+  if (el) el.remove();
+}
+
+function addTraces(traces) {
+  const log = document.getElementById('traceLog');
+  traces.forEach((t, i) => {
+    setTimeout(() => {
+      const div = document.createElement('div');
+      div.className = 'trace-entry';
+      div.innerHTML = '<span class="trace-time">[' + t.time + ']</span> ' + t.text;
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+    }, i * 200);
+  });
+}
+
+function addActions(actions) {
+  const container = document.getElementById('chatMessages');
+  const row = document.createElement('div');
+  row.className = 'msg-row agent';
+  const btnsHtml = actions.map(a => '<button class="action-btn" onclick="selectAction(this)">' + a + '</button>').join('');
+  row.innerHTML = '<div class="action-buttons">' + btnsHtml + '</div>';
+  container.appendChild(row);
+  container.scrollTop = container.scrollHeight;
+}
+
+function selectAction(btn) {
+  btn.classList.add('selected');
+  btn.parentElement.querySelectorAll('.action-btn').forEach(b => {
+    if (b !== btn) { b.style.opacity = '0.4'; b.style.pointerEvents = 'none'; }
+  });
+}
+
+function advanceDemo() {
+  if (currentStep >= DEMO_STEPS.length) return;
+  const step = DEMO_STEPS[currentStep];
+  const btn = document.getElementById('nextBtn');
+  btn.disabled = true;
+
+  if (step.type === 'user') {
+    addMessage('user', step.text, null);
+    addTraces(step.traces);
+    setTimeout(() => {
+      currentStep++;
+      updateStepInfo();
+      btn.disabled = false;
+      if (currentStep < DEMO_STEPS.length && DEMO_STEPS[currentStep].type === 'agent') {
+        addTyping();
+      }
+    }, 400);
+  } else {
+    removeTyping();
+    setTimeout(() => {
+      addMessage('agent', step.text, step.subjob);
+      addTraces(step.traces);
+      if (step.actions) {
+        setTimeout(() => addActions(step.actions), 300);
+      }
+      if (step.isLast) {
+        setTimeout(() => {
+          document.getElementById('metricsCard').classList.add('show');
+          btn.textContent = 'Demo Complete ✓';
+          btn.disabled = true;
+        }, 600);
+      }
+      setTimeout(() => {
+        currentStep++;
+        updateStepInfo();
+        btn.disabled = false;
+        if (step.isLast) btn.disabled = true;
+      }, 300);
+    }, 600);
+  }
+}
+
+function updateStepInfo() {
+  document.getElementById('stepInfo').textContent = 'Step ' + Math.min(currentStep + 1, DEMO_STEPS.length) + ' of ' + DEMO_STEPS.length;
+}
+
+// ===== EXPLORE MODE (GEMINI API) =====
+const GEMINI_KEY = 'AIzaSyA9SX_hs0l0-AF5Jb4vBy0sn5HG3aym3Yc';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + GEMINI_KEY;
+
+const SYSTEM_PROMPT = `You are the Smart Support Agent for Scalable Capital, a European neobroker and bank. You are currently assisting client Maria Schneider (spelled exactly: M-A-R-I-A S-C-H-N-E-I-D-E-R). Client ID: SC-847291, PRIME+ member since March 2024. Always address her as "Maria" (never Marla, Marie, or any other spelling).
+
+Maria's account data:
+- Portfolio: iShares MSCI World ETF (€12,450), Xtrackers MSCI EM (€3,820), Scalable World ETF (€1,200). Total: €17,470.
+- Savings plans: MSCI World ETF €200/month (FAILED Feb 15 — insufficient cash), MSCI EM €50/month (active, next execution Mar 1).
+- Cash balance: €142.30 (was €242.30 on Feb 1, dropped after €50 withdrawal on Feb 12 and €50 MSCI EM execution on Feb 1).
+- Account type: PRIME+ (€4.99/month), includes unlimited trades and 2% interest on cash.
+
+Rules:
+- Be helpful, clear, and concise. Use specific data from Maria's account.
+- NEVER give investment advice or recommendations (e.g., "you should buy X" or "I recommend selling Y"). If asked, politely decline and explain you can only provide factual information.
+- NEVER discuss other clients' data. You only know about Maria.
+- If asked to take actions (reschedule, modify plans), describe what you would do and ask for confirmation, but note this is a demo and the action won't actually execute.
+- Always respond in English.
+- Keep responses under 150 words.
+- Be warm and professional, matching Scalable Capital's tone.`;
+
+let exploreHistory = [];
+let exploreCount = 15;
+
+function askSuggestion(el) {
+  const text = el.textContent;
+  document.getElementById('exploreInput').value = text;
+  sendExplore();
+}
+
+async function sendExplore() {
+  const input = document.getElementById('exploreInput');
+  const text = input.value.trim();
+  if (!text || exploreCount <= 0) return;
+
+  input.value = '';
+  exploreCount--;
+  document.getElementById('exploreCounter').textContent = exploreCount + ' messages remaining';
+
+  const msgs = document.getElementById('exploreMessages');
+
+  const userRow = document.createElement('div');
+  userRow.className = 'msg-row user';
+  userRow.innerHTML = '<div class="msg-bubble" style="background: var(--sc-emerald); border-radius: 14px 14px 4px 14px; color: white; font-size: 13px;">' + escapeHtml(text) + '</div>';
+  msgs.appendChild(userRow);
+
+  const typingRow = document.createElement('div');
+  typingRow.className = 'msg-row agent';
+  typingRow.id = 'exploreTyping';
+  typingRow.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+  msgs.appendChild(typingRow);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  document.getElementById('exploreSendBtn').disabled = true;
+
+  exploreHistory.push({ role: 'user', parts: [{ text: text }] });
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+
+    const body = {
+      contents: [
+        { role: 'user', parts: [{ text: SYSTEM_PROMPT }] },
+        { role: 'model', parts: [{ text: 'Understood. I am the Scalable Capital Smart Support Agent assisting Maria Schneider. I will follow all the rules provided. How can I help?' }] },
+        ...exploreHistory
+      ],
+      generationConfig: { temperature: 0.3, maxOutputTokens: 400 }
+    };
+
+    const res = await fetch(GEMINI_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+
+    if (!res.ok) throw new Error('API error: ' + res.status);
+
+    const data = await res.json();
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'I apologize, I could not generate a response. Please try again.';
+
+    exploreHistory.push({ role: 'model', parts: [{ text: reply }] });
+
+    const existing = document.getElementById('exploreTyping');
+    if (existing) existing.remove();
+
+    const agentRow = document.createElement('div');
+    agentRow.className = 'msg-row agent';
+    agentRow.innerHTML = '<div class="msg-bubble" style="background: var(--sc-dark-elevated); border-radius: 14px 14px 14px 4px; color: #E5E7EB; font-size: 13px;">' + formatResponse(reply) + '</div>';
+    msgs.appendChild(agentRow);
+
+  } catch (err) {
+    const existing = document.getElementById('exploreTyping');
+    if (existing) existing.remove();
+
+    const errRow = document.createElement('div');
+    errRow.className = 'msg-row agent';
+    errRow.innerHTML = '<div class="msg-bubble" style="background: var(--sc-dark-elevated); border-radius: 14px 14px 14px 4px; color: var(--sc-medium-grey); font-size: 13px;">Live AI exploration is currently unavailable. The guided demo above shows the full experience. <br><small>(' + escapeHtml(err.message) + ')</small></div>';
+    msgs.appendChild(errRow);
+  }
+
+  document.getElementById('exploreSendBtn').disabled = false;
+  msgs.scrollTop = msgs.scrollHeight;
+
+  if (exploreCount <= 0) {
+    document.getElementById('exploreSendBtn').disabled = true;
+    document.getElementById('exploreInput').disabled = true;
+    document.getElementById('exploreInput').placeholder = 'Session limit reached';
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function formatResponse(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+}
+</script>
+
+</body>
+</html>
