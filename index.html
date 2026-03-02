@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Platform PM — Test Assignment | Pavel Andreyeuski</title>
+<title>AI Platform PM — Test Assignment | Pasha Andrzejewski</title>
+<meta name="description" content="Smart Support Agent: From FAQ Bot to Client-Aware Copilot. AI Platform PM test assignment for Scalable Capital by Pasha Andrzejewski.">
+<meta property="og:title" content="Smart Support Agent — Scalable Capital AI Platform PM">
+<meta property="og:description" content="An AI-powered support agent that knows your clients, diagnoses their issues, and takes action — with full compliance traceability.">
+<meta property="og:type" content="website">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -16,7 +20,10 @@
   --sc-white: #FFFFFF;
   --sc-light-grey: #F5F7FA;
   --sc-medium-grey: #8A94A6;
-  --sc-border: #E2E8F0;
+  --sc-border: #252B33;
+  --sc-body-text: #E5E7EB;
+  --sc-body-secondary: #9CA3AF;
+  --sc-success: #07D2A6;
   --sc-error: #E53E3E;
   --sc-warning: #F6AD55;
   --sc-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -24,33 +31,33 @@
   --sc-radius-sm: 8px;
   --sc-radius-md: 12px;
   --sc-radius-lg: 16px;
-  --sc-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
-  --sc-shadow-lg: 0 4px 12px rgba(0,0,0,0.12);
+  --sc-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.2);
+  --sc-shadow-lg: 0 4px 16px rgba(0,0,0,0.4);
 }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { font-family: var(--sc-font); color: var(--sc-dark-base); background: var(--sc-white); line-height: 1.6; }
+body { font-family: var(--sc-font); color: var(--sc-white); background: var(--sc-dark-base); line-height: 1.6; }
 
 /* NAV */
-nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--sc-border); }
-.nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px; }
+nav { position: sticky; top: 0; z-index: 100; background: rgba(11,15,20,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--sc-dark-elevated); }
+.nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 64px; }
 .nav-logo { font-weight: 700; font-size: 14px; color: var(--sc-emerald); letter-spacing: -0.3px; }
 .nav-links { display: flex; gap: 4px; flex-wrap: wrap; }
 .nav-links a { font-size: 11px; font-weight: 500; color: var(--sc-medium-grey); text-decoration: none; padding: 4px 8px; border-radius: 6px; transition: all 0.2s; white-space: nowrap; }
-.nav-links a:hover, .nav-links a.active { color: var(--sc-emerald); background: rgba(8,150,136,0.08); }
+.nav-links a:hover, .nav-links a.active { color: var(--sc-emerald-accent); background: rgba(8,150,136,0.12); }
 .progress-bar { height: 2px; background: var(--sc-emerald-accent); width: 0%; transition: width 0.3s; position: absolute; bottom: 0; left: 0; }
 
 /* SECTIONS */
 section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
-section:nth-child(even of section) { background: var(--sc-light-grey); max-width: 100%; }
+section:nth-child(even of section) { background: var(--sc-dark-surface); max-width: 100%; }
 section:nth-child(even of section) > .section-inner { max-width: 900px; margin: 0 auto; }
 .section-label { font-size: 12px; font-weight: 600; color: var(--sc-emerald); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
-h1 { font-size: 48px; font-weight: 800; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 20px; }
+h1 { font-size: 48px; font-weight: 700; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 20px; }
 h2 { font-size: 32px; font-weight: 700; line-height: 1.2; letter-spacing: -0.8px; margin-bottom: 16px; }
-h3 { font-size: 20px; font-weight: 600; line-height: 1.3; margin-bottom: 12px; }
-p { margin-bottom: 16px; color: #374151; }
+h3 { font-size: 24px; font-weight: 600; line-height: 1.3; margin-bottom: 12px; }
+p { margin-bottom: 16px; color: var(--sc-body-text); }
 .lead { font-size: 18px; color: var(--sc-medium-grey); margin-bottom: 32px; }
-.bold-summary { font-size: 18px; font-weight: 600; color: var(--sc-dark-base); margin-bottom: 24px; line-height: 1.5; border-left: 3px solid var(--sc-emerald); padding-left: 16px; }
+.bold-summary { font-size: 18px; font-weight: 600; color: var(--sc-white); margin-bottom: 24px; line-height: 1.5; border-left: 3px solid var(--sc-emerald); padding-left: 16px; }
 
 /* COVER */
 #cover { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; padding-top: 40px; }
@@ -60,47 +67,57 @@ p { margin-bottom: 16px; color: #374151; }
 .cover-meta .badge { background: rgba(8,150,136,0.1); color: var(--sc-emerald); padding: 4px 12px; border-radius: 20px; font-weight: 500; }
 
 /* CARDS */
-.card { background: var(--sc-white); border: 1px solid var(--sc-border); border-radius: var(--sc-radius-md); padding: 24px; margin-bottom: 16px; box-shadow: var(--sc-shadow); }
+.card { background: var(--sc-dark-surface); border: 1px solid var(--sc-dark-elevated); border-radius: var(--sc-radius-md); padding: 24px; margin-bottom: 16px; box-shadow: var(--sc-shadow); }
 .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
 .card h3 { font-size: 16px; margin-bottom: 8px; }
 .card p { font-size: 14px; margin-bottom: 8px; }
-.card .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: rgba(8,150,136,0.1); color: var(--sc-emerald); margin-right: 4px; margin-bottom: 4px; }
+
+.eval-layer { margin-bottom: 32px; }
+.eval-layer-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--sc-dark-elevated); }
+.eval-layer-header .layer-badge { background: var(--sc-emerald); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+.eval-layer-header h3 { font-size: 18px; margin: 0; }
+.eval-items { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.eval-item { background: var(--sc-dark-surface); border: 1px solid var(--sc-dark-elevated); border-radius: var(--sc-radius-md); padding: 16px; }
+.eval-item-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--sc-emerald-accent); margin-bottom: 6px; }
+.eval-item p { font-size: 13px; color: var(--sc-body-text); margin: 0; line-height: 1.55; }
+@media (max-width: 600px) { .eval-items { grid-template-columns: 1fr; } }
+.card .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: rgba(8,150,136,0.15); color: var(--sc-emerald-accent); margin-right: 4px; margin-bottom: 4px; }
 
 /* BEFORE/AFTER */
 .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 32px 0; }
 .comparison-box { border-radius: var(--sc-radius-md); padding: 24px; position: relative; }
-.comparison-box.before { background: #F3F4F6; border: 1px solid #D1D5DB; }
+.comparison-box.before { background: var(--sc-dark-surface); border: 1px solid var(--sc-dark-elevated); }
 .comparison-box.after { background: var(--sc-dark-base); color: var(--sc-white); border: 2px solid var(--sc-emerald); }
 .comparison-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
 .comparison-box.before .comparison-label { color: var(--sc-medium-grey); }
 .comparison-box.after .comparison-label { color: var(--sc-emerald-accent); }
 .comparison-box .msg { font-size: 14px; line-height: 1.6; }
-.comparison-box.before .msg { color: #6B7280; }
+.comparison-box.before .msg { color: var(--sc-body-secondary); }
 .comparison-box .link-fake { color: var(--sc-emerald); text-decoration: underline; font-size: 13px; }
 
 /* MATURITY */
 .maturity { display: flex; gap: 0; margin: 32px 0; }
-.maturity-step { flex: 1; padding: 16px; text-align: center; border: 1px solid var(--sc-border); position: relative; }
+.maturity-step { flex: 1; padding: 16px; text-align: center; border: 1px solid var(--sc-dark-elevated); position: relative; }
 .maturity-step:first-child { border-radius: var(--sc-radius-sm) 0 0 var(--sc-radius-sm); }
 .maturity-step:last-child { border-radius: 0 var(--sc-radius-sm) var(--sc-radius-sm) 0; }
 .maturity-step .level { font-size: 11px; font-weight: 700; color: var(--sc-medium-grey); text-transform: uppercase; letter-spacing: 1px; }
 .maturity-step .level-name { font-size: 13px; font-weight: 600; margin-top: 4px; }
-.maturity-step.current { background: rgba(8,150,136,0.08); border-color: var(--sc-emerald); }
+.maturity-step.current { background: rgba(8,150,136,0.12); border-color: var(--sc-emerald); }
 .maturity-step.target { background: var(--sc-emerald); color: white; border-color: var(--sc-emerald); }
 .maturity-step.target .level { color: rgba(255,255,255,0.7); }
 .maturity-step.future { opacity: 0.5; }
 
 /* STATS */
 .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0; }
-.stat { text-align: center; padding: 20px; background: var(--sc-white); border-radius: var(--sc-radius-md); border: 1px solid var(--sc-border); }
+.stat { text-align: center; padding: 20px; background: var(--sc-dark-surface); border-radius: var(--sc-radius-md); border: 1px solid var(--sc-dark-elevated); }
 .stat .num { font-size: 36px; font-weight: 800; color: var(--sc-emerald); letter-spacing: -1px; }
 .stat .label { font-size: 12px; color: var(--sc-medium-grey); margin-top: 4px; }
 
 /* TABLE */
 table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; }
-th { text-align: left; font-weight: 600; padding: 12px 16px; border-bottom: 2px solid var(--sc-border); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--sc-medium-grey); }
-td { padding: 12px 16px; border-bottom: 1px solid var(--sc-border); }
-tr:hover { background: var(--sc-light-grey); }
+th { text-align: left; font-weight: 600; padding: 12px 16px; border-bottom: 2px solid var(--sc-dark-elevated); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--sc-medium-grey); }
+td { padding: 12px 16px; border-bottom: 1px solid var(--sc-dark-elevated); color: var(--sc-body-text); }
+tr:hover { background: var(--sc-dark-elevated); }
 .score-high { color: var(--sc-error); font-weight: 700; }
 .score-med { color: var(--sc-warning); font-weight: 700; }
 .score-low { color: var(--sc-emerald); font-weight: 700; }
@@ -113,7 +130,7 @@ tr:hover { background: var(--sc-light-grey); }
 
 /* JOB GRAPH */
 .job-graph { display: flex; gap: 0; margin: 32px 0; align-items: stretch; }
-.job-node { flex: 1; padding: 16px 12px; text-align: center; border: 2px solid var(--sc-border); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
+.job-node { flex: 1; padding: 16px 12px; text-align: center; border: 2px solid var(--sc-dark-elevated); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
 .job-node:first-child { border-radius: var(--sc-radius-sm) 0 0 var(--sc-radius-sm); }
 .job-node:last-child { border-radius: 0 var(--sc-radius-sm) var(--sc-radius-sm) 0; }
 .job-node .step-num { font-size: 11px; font-weight: 700; color: var(--sc-emerald); }
@@ -126,39 +143,42 @@ tr:hover { background: var(--sc-light-grey); }
 .cta-section { text-align: center; padding: 60px 24px; }
 .btn-primary { display: inline-block; background: var(--sc-emerald); color: white; padding: 16px 40px; border-radius: var(--sc-radius-sm); font-weight: 600; font-size: 16px; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; }
 .btn-primary:hover { background: var(--sc-emerald-accent); transform: translateY(-1px); box-shadow: var(--sc-shadow-lg); }
-.btn-secondary { display: inline-block; border: 2px solid var(--sc-emerald); color: var(--sc-emerald); padding: 14px 36px; border-radius: var(--sc-radius-sm); font-weight: 600; font-size: 15px; text-decoration: none; transition: all 0.2s; margin-left: 12px; }
-.btn-secondary:hover { background: rgba(8,150,136,0.08); }
+.btn-secondary { display: inline-block; border: 1px solid var(--sc-emerald); color: var(--sc-emerald); padding: 14px 36px; border-radius: var(--sc-radius-sm); font-weight: 600; font-size: 15px; text-decoration: none; transition: all 0.2s; margin-left: 12px; }
+.btn-secondary:hover { background: rgba(8,150,136,0.12); }
 
 /* GUARDRAIL LAYERS */
 .guardrail-stack { margin: 24px 0; }
-.guardrail-layer { display: flex; align-items: flex-start; gap: 16px; padding: 20px; border: 1px solid var(--sc-border); border-radius: var(--sc-radius-md); margin-bottom: 12px; background: var(--sc-white); }
+.guardrail-layer { display: flex; align-items: flex-start; gap: 16px; padding: 20px; border: 1px solid var(--sc-dark-elevated); border-radius: var(--sc-radius-md); margin-bottom: 12px; background: var(--sc-dark-surface); }
 .guardrail-layer .layer-num { background: var(--sc-emerald); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
-.guardrail-layer h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-.guardrail-layer p { font-size: 13px; color: #6B7280; margin: 0; }
+.guardrail-layer h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+.guardrail-layer p { font-size: 13px; color: var(--sc-body-secondary); margin: 0; line-height: 1.6; }
+.guardrail-layer ul { list-style: none; padding: 0; margin: 0; }
+.guardrail-layer li { font-size: 13px; color: var(--sc-body-text); padding: 4px 0; padding-left: 16px; position: relative; line-height: 1.5; }
+.guardrail-layer li::before { content: ""; position: absolute; left: 0; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--sc-emerald-accent); }
 
 /* TIMELINE */
 .timeline { margin: 24px 0; }
-.timeline-item { display: flex; gap: 16px; padding: 20px 0; border-left: 2px solid var(--sc-border); padding-left: 24px; position: relative; }
-.timeline-item::before { content: ''; position: absolute; left: -6px; top: 24px; width: 10px; height: 10px; border-radius: 50%; background: var(--sc-emerald); border: 2px solid var(--sc-white); }
+.timeline-item { display: flex; gap: 16px; padding: 20px 0; border-left: 2px solid var(--sc-dark-elevated); padding-left: 24px; position: relative; }
+.timeline-item::before { content: ''; position: absolute; left: -6px; top: 24px; width: 10px; height: 10px; border-radius: 50%; background: var(--sc-emerald); border: 2px solid var(--sc-dark-base); }
 .timeline-item .time { font-size: 12px; font-weight: 600; color: var(--sc-emerald); min-width: 80px; }
 
 /* SEGMENT CARD */
 .segment-card { border-left: 3px solid var(--sc-emerald); padding-left: 16px; margin-bottom: 20px; }
-.segment-card.selected { border-left-color: var(--sc-emerald-accent); background: rgba(8,150,136,0.04); padding: 16px; border-radius: 0 var(--sc-radius-sm) var(--sc-radius-sm) 0; }
+.segment-card.selected { border-left-color: var(--sc-emerald-accent); background: rgba(8,150,136,0.08); padding: 16px; border-radius: 0 var(--sc-radius-sm) var(--sc-radius-sm) 0; }
 .segment-card h4 { font-size: 15px; font-weight: 600; }
-.segment-card .jobs { font-size: 13px; color: #6B7280; margin-top: 4px; }
-.segment-card .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: rgba(8,150,136,0.1); color: var(--sc-emerald); margin-right: 6px; margin-bottom: 4px; }
+.segment-card .jobs { font-size: 13px; color: var(--sc-body-secondary); margin-top: 4px; }
+.segment-card .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: rgba(8,150,136,0.15); color: var(--sc-emerald-accent); margin-right: 6px; margin-bottom: 4px; }
 .selected-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: var(--sc-emerald); color: white; margin-left: 8px; vertical-align: middle; }
 
 /* PASSWORD GATE */
-.pw-overlay { position: fixed; inset: 0; z-index: 9999; background: var(--sc-white); display: flex; align-items: center; justify-content: center; transition: opacity 0.4s; }
+.pw-overlay { position: fixed; inset: 0; z-index: 9999; background: var(--sc-dark-base); display: flex; align-items: center; justify-content: center; transition: opacity 0.4s; }
 .pw-overlay.hidden { opacity: 0; pointer-events: none; }
-.pw-box { background: var(--sc-white); border: 1px solid var(--sc-border); border-radius: 16px; padding: 40px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
-.pw-box h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: var(--sc-dark-base); }
+.pw-box { background: var(--sc-dark-surface); border: 1px solid var(--sc-dark-elevated); border-radius: 16px; padding: 40px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+.pw-box h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: var(--sc-white); }
 .pw-box p { font-size: 13px; color: var(--sc-medium-grey); margin-bottom: 24px; line-height: 1.5; }
 .pw-box .pw-lock { font-size: 32px; margin-bottom: 16px; }
 .pw-input-row { display: flex; gap: 8px; }
-.pw-input-row input { flex: 1; background: var(--sc-light-grey); border: 1px solid var(--sc-border); border-radius: 8px; padding: 12px 16px; color: var(--sc-dark-base); font-family: var(--sc-font); font-size: 14px; outline: none; }
+.pw-input-row input { flex: 1; background: var(--sc-dark-elevated); border: 1px solid var(--sc-dark-elevated); border-radius: 8px; padding: 12px 16px; color: var(--sc-white); font-family: var(--sc-font); font-size: 14px; outline: none; }
 .pw-input-row input:focus { border-color: var(--sc-emerald); }
 .pw-input-row button { background: var(--sc-emerald); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--sc-font); }
 .pw-input-row button:hover { background: var(--sc-emerald-accent); }
@@ -166,8 +186,24 @@ tr:hover { background: var(--sc-light-grey); }
 .pw-error.show { display: block; }
 .pw-hint { font-size: 11px; color: var(--sc-medium-grey); margin-top: 16px; }
 
+/* REFERENCES */
+.ref { font-size: 10px; vertical-align: super; line-height: 0; }
+.ref a { color: var(--sc-emerald); text-decoration: none; }
+.ref a:hover { text-decoration: underline; }
+.references-section { max-width: 900px; margin: 0 auto; padding: 60px 24px 40px; }
+.references-section h3 { font-weight: 600; margin-bottom: 16px; color: var(--sc-medium-grey); text-transform: uppercase; letter-spacing: 1px; font-size: 12px; }
+.references-section ol { list-style: none; counter-reset: ref-counter; padding: 0; }
+.references-section li { counter-increment: ref-counter; font-size: 12px; color: var(--sc-medium-grey); margin-bottom: 8px; padding-left: 28px; position: relative; line-height: 1.5; }
+.references-section li::before { content: "[" counter(ref-counter) "]"; position: absolute; left: 0; color: var(--sc-emerald); font-weight: 600; font-size: 11px; }
+.references-section li a { color: var(--sc-emerald); text-decoration: none; word-break: break-all; }
+.references-section li a:hover { text-decoration: underline; }
+
 /* FOOTER */
-footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--sc-medium-grey); border-top: 1px solid var(--sc-border); }
+footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--sc-medium-grey); border-top: 1px solid var(--sc-dark-elevated); }
+
+/* HAMBURGER */
+.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+.hamburger span { display: block; width: 20px; height: 2px; background: var(--sc-body-text); margin: 4px 0; transition: all 0.3s; border-radius: 1px; }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
@@ -176,7 +212,10 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
   .comparison, .card-grid, .stats-row { grid-template-columns: 1fr; }
   .maturity, .job-graph { flex-direction: column; }
   .maturity-step:first-child, .maturity-step:last-child, .job-node:first-child, .job-node:last-child { border-radius: var(--sc-radius-sm); }
-  .nav-links { display: none; }
+  .hamburger { display: block; }
+  .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; background: rgba(11,15,20,0.98); backdrop-filter: blur(8px); padding: 12px 24px 16px; border-bottom: 1px solid var(--sc-dark-elevated); flex-direction: column; gap: 2px; box-shadow: var(--sc-shadow-lg); }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 8px 12px; font-size: 13px; }
   section { padding: 48px 16px; }
 }
 </style>
@@ -194,14 +233,17 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
       <button onclick="unlockPage()">Unlock</button>
     </div>
     <div class="pw-error" id="pwError">Incorrect access code. Please try again.</div>
-    <div class="pw-hint">Pavel Andreyeuski &middot; February 2026</div>
+    <div class="pw-hint">Pasha Andrzejewski &middot; February 2026</div>
   </div>
 </div>
 
 <nav>
   <div class="nav-inner">
     <div class="nav-logo">Scalable Capital &middot; AI Platform PM</div>
-    <div class="nav-links">
+    <button class="hamburger" id="hamburgerBtn" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
       <a href="#gap">The Gap</a>
       <a href="#opportunity">Opportunity</a>
       <a href="#users">Users</a>
@@ -210,7 +252,8 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
       <a href="#idea">The Idea</a>
       <a href="#evaluation">Evaluation</a>
       <a href="#guardrails">Guardrails</a>
-      <a href="#roadmap">Roadmap</a>
+      <a href="#whyme">Why Me</a>
+      <a href="#references">Refs</a>
     </div>
   </div>
   <div class="progress-bar" id="progressBar"></div>
@@ -222,10 +265,10 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
   <h1>Smart Support Agent:<br><span>From FAQ Bot to Client-Aware Copilot</span></h1>
   <p class="lead">An AI-powered support agent that knows your clients, diagnoses their issues, and takes action — with full compliance traceability.</p>
   <div class="cover-meta">
-    <span class="badge">Pavel Andreyeuski</span>
+    <span class="badge">Pasha Andrzejewski</span>
     <span>AI Platform PM Candidate</span>
     <span>&middot;</span>
-    <span>~8 min read</span>
+    <span>~10 min read</span>
     <span>&middot;</span>
     <span>February 2026</span>
   </div>
@@ -236,7 +279,7 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
 </section>
 
 <!-- 2. THE GAP -->
-<section id="gap" style="background: var(--sc-light-grey); max-width: 100%;">
+<section id="gap" style="background: var(--sc-dark-surface); max-width: 100%;">
   <div class="section-inner" style="max-width: 900px; margin: 0 auto;">
     <div class="section-label">The Gap</div>
     <h2>Same question. Two very different experiences.</h2>
@@ -274,12 +317,13 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
 <section id="opportunity">
   <div class="section-label">The Opportunity</div>
   <h2>The industry has moved. It's time to catch up — and leap ahead.</h2>
-  <p class="bold-summary">93% of fintech support teams are investing in AI agents. The best-in-class achieve 85%+ resolution rates. Scalable is at 70% with an FAQ bot. The gap is an opportunity worth millions annually.</p>
+  <p class="bold-summary">93% of fintech support teams are investing in AI agents<sup style="font-size: 10px; color: var(--sc-emerald);">*</sup>. The best-in-class achieve 85%+ resolution rates. Scalable is at 70% with an FAQ bot (per interview with Sebastian). The gap is an opportunity worth millions annually.</p>
+  <p style="font-size: 11px; color: var(--sc-medium-grey); margin-top: -24px; margin-bottom: 24px;"><sup>*</sup> Intercom 2025 Fintech Customer Service Transformation Report; see also <a href="https://www.intercom.com/campaign/customer-service-transformation-report-2026" style="color: var(--sc-medium-grey); text-decoration: underline;">Intercom 2026 Customer Service Report</a></p>
 
   <div class="stats-row">
     <div class="stat">
       <div class="num">70%</div>
-      <div class="label">Scalable's current<br>AI resolution rate</div>
+      <div class="label">Scalable's current<br>AI resolution rate<br><span style="font-size: 10px; color: var(--sc-medium-grey);">(per interview with Sebastian)</span></div>
     </div>
     <div class="stat">
       <div class="num">85%+</div>
@@ -287,12 +331,12 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
     </div>
     <div class="stat">
       <div class="num">€6.60</div>
-      <div class="label">Avg. cost per<br>human resolution</div>
+      <div class="label">Avg. cost per<br>human resolution<sup class="ref"><a href="#ref-11">[11]</a></sup></div>
     </div>
   </div>
 
   <h3>Support AI Maturity Curve</h3>
-  <p>Based on <a href="https://fin.ai/blueprint/introducing-ai-agents" style="color: var(--sc-emerald);">Intercom's AI Agent Blueprint</a> and fintech benchmarks:</p>
+  <p>Based on Intercom's AI Agent Blueprint<sup class="ref"><a href="#ref-12">[12]</a></sup> and fintech benchmarks:</p>
   <div class="maturity">
     <div class="maturity-step current">
       <div class="level">Level 1-2</div>
@@ -321,7 +365,7 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
 </section>
 
 <!-- 4. UNDERSTANDING THE USERS -->
-<section id="users" style="background: var(--sc-light-grey); max-width: 100%;">
+<section id="users" style="background: var(--sc-dark-surface); max-width: 100%;">
   <div class="section-inner" style="max-width: 900px; margin: 0 auto;">
     <div class="section-label">Understanding the Users</div>
     <h2>Five segments. Five different jobs. One platform.</h2>
@@ -419,7 +463,7 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
 </section>
 
 <!-- 6. RISKIEST ASSUMPTIONS -->
-<section id="risks" style="background: var(--sc-light-grey); max-width: 100%;">
+<section id="risks" style="background: var(--sc-dark-surface); max-width: 100%;">
   <div class="section-inner" style="max-width: 900px; margin: 0 auto;">
     <div class="section-label">Riskiest Assumptions</div>
     <h2>What could kill this idea — and how to test it fast.</h2>
@@ -431,7 +475,7 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
       </thead>
       <tbody>
         <tr><td>1</td><td><strong>Compliance approval for client data access by AI</strong><br><span style="font-size: 12px; color: var(--sc-medium-grey);">Will Legal/DPO approve portfolio data in LLM context?</span></td><td>Regulatory</td><td>3</td><td>5</td><td class="score-high">15</td></tr>
-        <tr><td>2</td><td><strong>AI hallucination in financial context</strong><br><span style="font-size: 12px; color: var(--sc-medium-grey);">Can accuracy stay below 1% hallucination rate on client data?</span></td><td>Value</td><td>3</td><td>5</td><td class="score-high">15</td></tr>
+        <tr><td>2</td><td><strong>AI hallucination in financial context</strong><br><span style="font-size: 12px; color: var(--sc-medium-grey);">Can the hallucination rate stay below 1% on client-specific financial data?</span></td><td>Value</td><td>3</td><td>5</td><td class="score-high">15</td></tr>
         <tr><td>3</td><td><strong>Client trust in AI for account actions</strong><br><span style="font-size: 12px; color: var(--sc-medium-grey);">Will 40%+ of clients let AI modify their account?</span></td><td>Adoption</td><td>3</td><td>3</td><td class="score-med">9</td></tr>
         <tr><td>4</td><td><strong>Technical latency of data retrieval</strong><br><span style="font-size: 12px; color: var(--sc-medium-grey);">Can portfolio data be retrieved in under 2 seconds?</span></td><td>Technical</td><td>2</td><td>3</td><td class="score-low">6</td></tr>
         <tr><td>5</td><td><strong>Cannibalization of Insights feature</strong><br><span style="font-size: 12px; color: var(--sc-medium-grey);">Can support agent and Insights coexist without confusion?</span></td><td>Market</td><td>3</td><td>2</td><td class="score-low">6</td></tr>
@@ -450,57 +494,62 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
 <section id="idea">
   <div class="section-label">The Idea</div>
   <h2>Smart Support Agent: Architecture</h2>
-  <p class="bold-summary">Four capability layers: client knowledge, proactive diagnosis, confirmed actions, and intelligent escalation. Built as a platform service reusable across all product teams.</p>
+  <p class="bold-summary">Five defense layers plus an evaluation engine — from input sanitization through output verification to regulatory compliance. Built as a platform service reusable across all product teams. <em style="font-weight: 400; color: var(--sc-body-secondary);">Try the guardrails yourself in the <a href="demo.html" style="color: var(--sc-emerald-accent);">live demo</a>.</em></p>
 
   <div class="arch-diagram">
     <div style="text-align: center; margin-bottom: 16px; color: var(--sc-medium-grey); font-family: var(--sc-font); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">System Architecture</div>
     <div class="arch-layer">
-      <span class="icon">👤</span>
+      <span class="icon" style="font-family: var(--sc-font-mono); font-size: 14px; background: var(--sc-dark-elevated); padding: 4px 8px; border-radius: 4px;">USR</span>
       <div><strong>Client</strong> — Scalable Capital app (iOS / Android / Web)</div>
     </div>
     <div style="text-align: center; color: var(--sc-medium-grey);">↓ chat message</div>
     <div class="arch-layer highlight">
-      <span class="icon">🛡️</span>
-      <div><strong>Input Guardrails</strong> — Prompt injection detection · Topic classification · PII masking</div>
+      <span class="icon" style="font-family: var(--sc-font-mono); font-size: 14px; background: rgba(8,150,136,0.2); padding: 4px 8px; border-radius: 4px;">IN</span>
+      <div><strong>Input Guardrails</strong> — Prompt injection detection · Topic classification · PII masking · Rate limiting · Data minimization</div>
     </div>
-    <div style="text-align: center; color: var(--sc-medium-grey);">↓</div>
+    <div style="text-align: center; color: var(--sc-medium-grey);">↓ sanitized input + structured client context</div>
     <div class="arch-layer highlight">
-      <span class="icon">🧠</span>
-      <div><strong>AI Agent (LLM + Context)</strong> — System prompt + Client data (portfolio, savings plans, cash) + FAQ knowledge base</div>
+      <span class="icon" style="font-family: var(--sc-font-mono); font-size: 14px; background: rgba(8,150,136,0.2); padding: 4px 8px; border-radius: 4px;">LLM</span>
+      <div><strong>Processing Guardrails + LLM</strong> — System prompt constraints · Action allowlist · Client-scoped data only · DORA-governed provider · Fallback hierarchy</div>
     </div>
     <div style="text-align: center; color: var(--sc-medium-grey);">↓ proposed response + actions</div>
     <div class="arch-layer highlight">
-      <span class="icon">✅</span>
-      <div><strong>Output Guardrails</strong> — Hallucination check · No investment advice · Confidence threshold · Disclaimers</div>
+      <span class="icon" style="font-family: var(--sc-font-mono); font-size: 14px; background: rgba(8,150,136,0.2); padding: 4px 8px; border-radius: 4px;">OUT</span>
+      <div><strong>Output Guardrails</strong> — Three-signal hallucination detection (structured data + NLI entailment + policy compliance) · Confidence threshold 0.80 · Investment advice block · Cross-client leakage scan</div>
+    </div>
+    <div style="text-align: center; color: var(--sc-medium-grey);">↓ verified response</div>
+    <div class="arch-layer highlight">
+      <span class="icon" style="font-family: var(--sc-font-mono); font-size: 14px; background: rgba(8,150,136,0.2); padding: 4px 8px; border-radius: 4px;">EVAL</span>
+      <div><strong>Evaluation Engine</strong> — Agent Quality Score (AQS) · Drift monitoring · LLM-as-Judge · Golden test set regression</div>
     </div>
     <div style="text-align: center; color: var(--sc-medium-grey);">↓</div>
     <div class="arch-layer">
-      <span class="icon">⚡</span>
+      <span class="icon" style="font-family: var(--sc-font-mono); font-size: 14px; background: var(--sc-dark-elevated); padding: 4px 8px; border-radius: 4px;">ACT</span>
       <div><strong>Action Engine</strong> — Allowlisted actions only · Client confirmation required · Audit trail</div>
     </div>
     <div style="text-align: center; color: var(--sc-medium-grey);">↓</div>
     <div class="arch-layer">
-      <span class="icon">📊</span>
-      <div><strong>Observability</strong> — Full conversation trace · Compliance audit log · Performance dashboard</div>
+      <span class="icon" style="font-family: var(--sc-font-mono); font-size: 14px; background: var(--sc-dark-elevated); padding: 4px 8px; border-radius: 4px;">LOG</span>
+      <div><strong>Observability &amp; Compliance</strong> — Immutable conversation trace · DORA-compliant incident management · BaFin quarterly audit · EU AI Act classification · GDPR Art. 22 controls</div>
     </div>
   </div>
 
   <div class="card-grid">
     <div class="card">
-      <h3>Layer 1: Knows the Client</h3>
-      <p>Accesses portfolio positions, savings plan config, cash balance, transaction history. Data is injected as structured context, not retrieved via RAG.</p>
+      <h3>Knows the Client</h3>
+      <p>Accesses portfolio positions, savings plan config, cash balance, transaction history. Data is injected as structured context under data minimization — only fields relevant to the detected issue.</p>
     </div>
     <div class="card">
-      <h3>Layer 2: Diagnoses Proactively</h3>
-      <p>Identifies root cause of issues by cross-referencing client data. "Your savings plan failed because your cash was €57.70 short."</p>
+      <h3>Acts with Confirmation</h3>
+      <p>Executes pre-approved actions (reschedule, adjust amount) with explicit client confirmation — satisfying GDPR Art. 22 human-in-the-loop. Every action has an immutable audit trail.</p>
     </div>
     <div class="card">
-      <h3>Layer 3: Takes Actions</h3>
-      <p>Executes pre-approved actions (reschedule, adjust amount) with explicit client confirmation. Every action has an audit trail.</p>
+      <h3>Escalates Intelligently</h3>
+      <p>Confidence below 0.80 or 3+ consecutive low-confidence messages triggers automatic escalation to human agents with full conversation context and client data summary.</p>
     </div>
     <div class="card">
-      <h3>Layer 4: Escalates Intelligently</h3>
-      <p>When confidence is low or the issue is complex, hands off to human agents with full conversation context and client data summary.</p>
+      <h3>Evaluates Continuously</h3>
+      <p>Agent Quality Score (AQS) tracks resolution, hallucination, CSAT, and action completion as a single north-star metric. Drift monitoring alerts if any metric degrades >2pp from baseline.</p>
     </div>
   </div>
 </section>
@@ -511,150 +560,232 @@ footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--s
   <h2 style="color: white;">See it in action.</h2>
   <p style="color: var(--sc-medium-grey); max-width: 500px; margin: 0 auto 32px;">An interactive demo showing the Smart Support Agent resolving a real savings plan issue — with live compliance tracing.</p>
   <a href="demo.html" class="btn-primary" style="font-size: 18px; padding: 18px 48px;">Try the Live Demo &rarr;</a>
+  <div style="margin-top: 40px;">
+    <a href="#evaluation" style="color: var(--sc-medium-grey); text-decoration: none; font-size: 13px; transition: color 0.2s;">Continue reading: Task 2 — Evaluation &amp; Guardrails &darr;</a>
+  </div>
 </section>
 
 <!-- 9. EVALUATION FRAMEWORK -->
 <section id="evaluation">
   <div class="section-label">Task 2 &middot; Evaluation Framework</div>
   <h2>How to measure AI quality before and after release.</h2>
-  <p class="bold-summary">Three evaluation layers: offline testing before release, online monitoring in production, and compliance-specific checks for regulatory adherence.</p>
+  <p class="bold-summary">Three evaluation layers — offline testing, online monitoring, and compliance-specific checks — aligned with NIST AI RMF<sup class="ref"><a href="#ref-8">[8]</a></sup> Measure function and BaFin's Dec 2025 guidance on AI/ICT risk management<sup class="ref"><a href="#ref-4">[4]</a></sup>.</p>
 
-  <div class="card" style="margin-bottom: 16px;">
-    <h3>Layer 1: Offline Evaluation (Pre-Release)</h3>
-    <p style="font-size: 14px;"><strong>Golden test set:</strong> 500+ labeled support cases with known-correct answers. Run on every model or prompt change.</p>
-    <p style="font-size: 14px;"><strong>Metrics:</strong> Answer accuracy (F1 score), hallucination rate (% of responses with fabricated info, measured by automated fact-checking against source data), retrieval quality (RAGAS: context relevance, faithfulness, answer relevancy), action safety (% of proposed actions matching expected).</p>
-    <p style="font-size: 14px;"><strong>Methodology:</strong> Automated regression suite. Hallucination detection via structured data comparison — if the agent says "your balance is €X" but the source data says €Y, that's a flagged hallucination. Red-team testing for adversarial prompts.</p>
+  <div class="eval-layer">
+    <div class="eval-layer-header">
+      <div class="layer-badge">1</div>
+      <h3>Offline Evaluation (Pre-Release)</h3>
+    </div>
+    <div class="eval-items">
+      <div class="eval-item">
+        <div class="eval-item-label">Golden Test Set</div>
+        <p>500+ labeled support cases with known-correct answers. Run on every model or prompt change. Refreshed monthly from production trace analysis. All prompts version-controlled; regressions block deployment.</p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-item-label">Metrics</div>
+        <p>Answer accuracy (F1), hallucination rate, retrieval quality via RAGAS<sup class="ref"><a href="#ref-2">[2]</a></sup> (context relevance, faithfulness, answer relevancy), action safety.</p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-item-label">Hallucination Detection</div>
+        <p>Three-signal approach: (1) Structured data comparison — flagged if agent says &euro;X but source says &euro;Y. (2) NLI entailment checking<sup class="ref"><a href="#ref-10">[10]</a></sup> — catches fabricated procedures. (3) Policy-compliance validation against regulatory ruleset.</p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-item-label">LLM-as-Judge</div>
+        <p>Separate evaluation model scores each response on faithfulness, helpfulness, safety. Calibrated quarterly against human reviewers to correct for known biases<sup class="ref"><a href="#ref-10">[10]</a></sup>.</p>
+      </div>
+    </div>
   </div>
 
-  <div class="card" style="margin-bottom: 16px;">
-    <h3>Layer 2: Online Evaluation (In Production)</h3>
-    <p style="font-size: 14px;"><strong>Resolution rate:</strong> % of conversations resolved without human escalation. Current: 70%. Target: 85%.</p>
-    <p style="font-size: 14px;"><strong>CSAT:</strong> Post-conversation satisfaction (thumbs up/down + optional comment). Track per segment.</p>
-    <p style="font-size: 14px;"><strong>Action completion rate:</strong> % of AI-proposed actions that clients confirm and complete. Target: >40%.</p>
-    <p style="font-size: 14px;"><strong>Trace analysis:</strong> Weekly review of failed/escalated conversations. Identify systematic gaps — new FAQ topics, edge cases, prompt improvements needed.</p>
+  <div class="eval-layer">
+    <div class="eval-layer-header">
+      <div class="layer-badge">2</div>
+      <h3>Online Evaluation (In Production)</h3>
+    </div>
+    <div class="eval-items">
+      <div class="eval-item">
+        <div class="eval-item-label">Resolution Rate</div>
+        <p>% of conversations resolved without human escalation. Current: 70% (per interview with Sebastian). Target: 85%.</p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-item-label">Agent Quality Score</div>
+        <p>Inspired by Intercom's CX Score<sup class="ref"><a href="#ref-9">[9]</a></sup>. Single north-star metric: <span style="font-family: var(--sc-font-mono); font-size: 11px; background: var(--sc-dark-elevated); padding: 2px 6px; border-radius: 4px;">AQS = 0.4&times;Res + 0.3&times;(1&minus;Hall) + 0.2&times;CSAT + 0.1&times;Actions</span></p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-item-label">CSAT</div>
+        <p>Post-conversation satisfaction (thumbs up/down + optional comment). Supplemented by ML-based sentiment analysis for full coverage.</p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-item-label">Action Completion</div>
+        <p>% of AI-proposed actions that clients confirm and complete. Target: >40%.</p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-item-label">Drift Monitoring</div>
+        <p>Weekly rolling average of all key metrics. Alert if any degrades >2pp from 30-day baseline. Critical for seasonal question distribution shifts.</p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-item-label">Trace Analysis</div>
+        <p>Weekly review of failed/escalated conversations by PM + Support Lead. Findings feed into golden test set refresh and prompt iteration backlog.</p>
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <h3>Layer 3: Compliance-Specific Evaluation</h3>
-    <p style="font-size: 14px;"><strong>Data leakage score:</strong> Automated checks that no PII or financial data from Client A appears in Client B's conversation.</p>
-    <p style="font-size: 14px;"><strong>Regulatory boundary:</strong> % of responses correctly refusing investment advice when asked. Target: 100%. Tested with adversarial prompts ("What stocks should I buy?").</p>
-    <p style="font-size: 14px;"><strong>Bias testing:</strong> Differential response quality across user demographics (language, account size, account age). Flagged if resolution rate varies >5% between cohorts.</p>
+  <div class="eval-layer">
+    <div class="eval-layer-header">
+      <div class="layer-badge">3</div>
+      <h3>Compliance-Specific Evaluation</h3>
+    </div>
+    <div class="eval-items">
+      <div class="eval-item">
+        <div class="eval-item-label">Data Leakage Score</div>
+        <p>Automated checks that no PII or financial data from Client A appears in Client B's conversation.</p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-item-label">Regulatory Boundary</div>
+        <p>% of responses correctly refusing investment advice. Target: 100%. Tested with adversarial prompts ("What stocks should I buy?").</p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-item-label">Bias Testing</div>
+        <p>Differential response quality across demographics (language, account size, age). Flagged if resolution rate varies >5% between cohorts.</p>
+      </div>
+      <div class="eval-item">
+        <div class="eval-item-label">Escalation Path</div>
+        <p>Violation detected &rarr; circuit breaker (topic disabled) &rarr; DPO incident report within 1h &rarr; root cause within 24h &rarr; fix deployed before topic re-enabled.</p>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- 10. GUARDRAILS -->
-<section id="guardrails" style="background: var(--sc-light-grey); max-width: 100%;">
+<section id="guardrails" style="background: var(--sc-dark-surface); max-width: 100%;">
   <div class="section-inner" style="max-width: 900px; margin: 0 auto;">
     <div class="section-label">Task 2 &middot; Guardrails</div>
-    <h2>Four defense layers against hallucination and data leakage.</h2>
-    <p class="bold-summary">Compliance is a design constraint, not a gate at the end. Every response passes through input sanitization, processing constraints, output classification, and immutable audit logging.</p>
+    <h2>Five defense layers against hallucination and data leakage.</h2>
+    <p class="bold-summary">Compliance is a design constraint, not a gate at the end. Every response passes through input sanitization, processing constraints, output classification, immutable audit logging, and regulatory controls — aligned with DORA<sup class="ref"><a href="#ref-6">[6]</a></sup>, the EU AI Act<sup class="ref"><a href="#ref-5">[5]</a></sup>, and GDPR Article 22<sup class="ref"><a href="#ref-7">[7]</a></sup>.</p>
 
     <div class="guardrail-stack">
       <div class="guardrail-layer">
         <div class="layer-num">1</div>
         <div>
           <h4>Input Guardrails</h4>
-          <p>Prompt injection detection (block adversarial inputs). Topic classification: route to support, investment (Insights), or reject. PII detection and masking before LLM processing. Rate limiting per session.</p>
+          <ul>
+            <li><strong>Prompt injection detection</strong> — block adversarial inputs before they reach the LLM</li>
+            <li><strong>Topic classification</strong> — route to support, investment (Insights), or reject</li>
+            <li><strong>PII masking</strong> — name, email, IBAN, tax ID masked before LLM. Portfolio data sent as structured context under data minimization</li>
+            <li><strong>Rate limiting</strong> per session</li>
+          </ul>
         </div>
       </div>
       <div class="guardrail-layer">
         <div class="layer-num">2</div>
         <div>
           <h4>Processing Guardrails</h4>
-          <p>System prompt with hard constraints: no investment advice, no data from other clients, no actions without confirmation. Retrieval scope: model can only access data for the authenticated, consenting client. Action allowlist: only pre-approved operations (reschedule, adjust amount, escalate).</p>
+          <ul>
+            <li><strong>Hard constraints</strong> — no investment advice, no other clients' data, no actions without confirmation</li>
+            <li><strong>Retrieval scope</strong> — model accesses only authenticated, consenting client data</li>
+            <li><strong>Action allowlist</strong> — only pre-approved operations (reschedule, adjust, escalate)</li>
+            <li><strong>Third-party risk</strong> — LLM provider governed under DORA ICT framework<sup class="ref"><a href="#ref-4">[4]</a></sup>. DPA ensures no client data used for training</li>
+            <li><strong>Fallback</strong> — LLM unavailable &rarr; FAQ bot. Low confidence 3x &rarr; human escalation with full context</li>
+          </ul>
         </div>
       </div>
       <div class="guardrail-layer">
         <div class="layer-num">3</div>
         <div>
           <h4>Output Guardrails</h4>
-          <p>Response classifier checks every output for: hallucinated financial facts, investment recommendations, cross-client data leakage. Confidence threshold: responses below 0.80 confidence trigger automatic escalation to human agent. Mandatory disclaimers on any financial topic.</p>
+          <ul>
+            <li><strong>Response classifier</strong> — checks every output for hallucinated facts, investment advice, cross-client leakage</li>
+            <li><strong>Confidence threshold</strong> — below 0.80 triggers automatic escalation to human agent</li>
+            <li><strong>Mandatory disclaimers</strong> on any financial topic</li>
+          </ul>
         </div>
       </div>
       <div class="guardrail-layer">
         <div class="layer-num">4</div>
         <div>
           <h4>Observability &amp; Audit</h4>
-          <p>Full conversation and decision trace logging (immutable, append-only). Real-time monitoring dashboard: hallucination spikes, escalation surges, latency anomalies. Quarterly model audit report for BaFin readiness and EU AI Act high-risk classification compliance.</p>
+          <ul>
+            <li><strong>Immutable trace logging</strong> — full conversation and decision log (append-only)</li>
+            <li><strong>Real-time dashboard</strong> — hallucination spikes, escalation surges, latency anomalies</li>
+            <li><strong>DORA incident management</strong> — failures classified via ICT incident taxonomy<sup class="ref"><a href="#ref-6">[6]</a></sup></li>
+            <li><strong>Business continuity</strong> — includes AI system unavailability scenarios</li>
+          </ul>
+        </div>
+      </div>
+      <div class="guardrail-layer">
+        <div class="layer-num">5</div>
+        <div>
+          <h4>Regulatory Compliance</h4>
+          <ul>
+            <li><strong>EU AI Act</strong> — Preliminary classification: limited-risk (support tool, not autonomous decision-maker). Client confirmation maintains human agency. Per Art. 6(3)<sup class="ref"><a href="#ref-5">[5]</a></sup></li>
+            <li><strong>GDPR</strong> — DPIA before deployment. Opt-out available. Client confirms all account modifications — satisfying Art. 22<sup class="ref"><a href="#ref-7">[7]</a></sup></li>
+            <li><strong>BaFin</strong> — Quarterly model audit per AI/ICT guidance<sup class="ref"><a href="#ref-4">[4]</a></sup>. Every decision traceable to source data via compliance trace log</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 11. ROADMAP -->
-<section id="roadmap">
-  <div class="section-label">Implementation Roadmap</div>
-  <h2>From POC to production in three phases.</h2>
-  <p class="bold-summary">A phased approach that validates the riskiest assumptions first, then scales. Compliance review is built into every phase, not added at the end.</p>
-
-  <div class="timeline">
-    <div class="timeline-item">
-      <div>
-        <div class="time">Month 1-2</div>
-        <h3>Phase 1: Internal Beta</h3>
-        <p style="font-size: 14px;">Deploy to 5-10 support agents as a copilot (AI drafts responses, humans review before sending). Validate accuracy on real client cases. Measure hallucination rate on structured data. Get DPO/Legal sign-off on data access scope.</p>
-        <p style="font-size: 14px;"><strong>Exit criteria:</strong> Hallucination rate &lt;1% on golden test set. Legal approval for read-only client data access.</p>
-      </div>
-    </div>
-    <div class="timeline-item">
-      <div>
-        <div class="time">Month 3-4</div>
-        <h3>Phase 2: Limited Client Rollout</h3>
-        <p style="font-size: 14px;">Roll out to 10% of clients (savings plan segment). AI handles diagnosis directly; actions still require human confirmation. Monitor resolution rate, CSAT, and escalation quality. A/B test against current FAQ bot.</p>
-        <p style="font-size: 14px;"><strong>Exit criteria:</strong> Resolution rate improvement of +10pp vs. control. CSAT equal or better than human-only support.</p>
-      </div>
-    </div>
-    <div class="timeline-item">
-      <div>
-        <div class="time">Month 5-6</div>
-        <h3>Phase 3: General Availability + Actions</h3>
-        <p style="font-size: 14px;">Full rollout to all clients. Enable AI-executed actions with client confirmation (reschedule, adjust). Expand to Segment 2 (traders) and Segment 3 (onboarding). Share client context layer as platform service for other teams (Insights, fraud).</p>
-        <p style="font-size: 14px;"><strong>Exit criteria:</strong> 85% resolution rate. Action adoption >40%. Platform API consumed by at least one other product team.</p>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- 12. WHY ME -->
-<section id="whyme" style="background: var(--sc-light-grey); max-width: 100%;">
+<section id="whyme" style="background: var(--sc-dark-base); max-width: 100%; border-top: 3px solid var(--sc-emerald); padding-top: 64px;">
   <div class="section-inner" style="max-width: 900px; margin: 0 auto;">
-    <div class="section-label">Why Me</div>
-    <h2>I've built exactly this before.</h2>
-    <p class="bold-summary">At emnify, I took AI from zero to an internal platform capability — the same journey Scalable is starting now.</p>
+    <div class="section-label" style="color: var(--sc-emerald-accent); font-size: 14px; letter-spacing: 2px;">About the Candidate</div>
+    <h2 style="font-size: 36px; margin-bottom: 8px;">I've built exactly this before.</h2>
+    <p class="bold-summary" style="font-size: 17px;">At emnify, I took AI from zero to an internal platform capability — the same journey Scalable is starting now.</p>
 
-    <div class="card-grid">
-      <div class="card">
+    <div class="card-grid" style="margin-top: 32px;">
+      <div class="card" style="border-left: 3px solid var(--sc-emerald); background: var(--sc-dark-elevated);">
         <h3>AI Chatbot → AI Copilot</h3>
-        <p>Built a documentation chatbot (450 MAU, 92.8% confident answers, €21K/month value). Evolved it into a context-aware AI Copilot with profile data access and action execution — 93% reduction in diagnosis time.</p>
+        <p>Built a documentation chatbot (450 MAU, 92.8% confident answers, €21K/month value). Evolved it into a context-aware AI Copilot with profile data access and action execution.</p>
       </div>
-      <div class="card">
+      <div class="card" style="border-left: 3px solid var(--sc-emerald); background: var(--sc-dark-elevated);">
         <h3>Platform PM for Internal Teams</h3>
-        <p>Became the internal AI platform PM. Built shared capabilities that product teams consumed as a service. 90% of PMs integrated AI into their workflows. Exactly the "AI as a Platform" model Scalable needs.</p>
+        <p>Became the internal AI platform PM. Organised multiple workshops on vibe-coding to move PMs into builders mode. Established a culture of constant sharing of AI use-cases inside the product team. Built compliant autonomous agents (e.g., competitors benchmarking). 90% of PMs integrated AI into their workflows. Exactly the "AI as a Platform" model Scalable needs.</p>
       </div>
-      <div class="card">
+      <div class="card" style="border-left: 3px solid var(--sc-emerald); background: var(--sc-dark-elevated);">
         <h3>Compliance-First Building</h3>
         <p>Built KYB/AML compliance products at Kontur (RegTech). At emnify, worked with DPO on AI data governance in telecom (BEREC-regulated). I bring legal/compliance into discovery, not just review.</p>
       </div>
-      <div class="card">
+      <div class="card" style="border-left: 3px solid var(--sc-emerald); background: var(--sc-dark-elevated);">
         <h3>Hands-On AI Builder</h3>
-        <p>Won an MCP hackathon in Berlin. Daily user of AI coding tools (Cursor, Claude). Built this entire test assignment — presentation, interactive demo, and live AI integration — as a demonstration of PM resourcefulness.</p>
+        <p>Won an MCP hackathon in Berlin. Daily user of AI coding tools (Cursor, Claude). Built this entire test assignment in 4 hours — presentation, interactive demo, and live AI integration — as a demonstration of PM resourcefulness.</p>
       </div>
     </div>
 
-    <div style="text-align: center; margin-top: 32px;">
-      <a href="demo.html" class="btn-primary">Try the Live Demo &rarr;</a>
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="demo.html" class="btn-primary" style="font-size: 16px; padding: 16px 40px;">Try the Live Demo &rarr;</a>
+      <a href="https://www.linkedin.com/in/pashaandreevski/" class="btn-secondary" target="_blank" rel="noopener" style="font-size: 16px; padding: 16px 40px;">LinkedIn Profile &rarr;</a>
     </div>
   </div>
 </section>
 
+<!-- REFERENCES -->
+<section id="references" class="references-section">
+  <h3>References &amp; Sources</h3>
+  <ol>
+    <li id="ref-1">Intercom, "2025 Fintech Customer Service Transformation Report." <a href="https://www.intercom.com/campaign/customer-service-transformation-report-2025" target="_blank" rel="noopener">intercom.com</a>. See also: <a href="https://www.intercom.com/campaign/customer-service-transformation-report-2026" target="_blank" rel="noopener">2026 Customer Service Report</a>.</li>
+    <li id="ref-2">Es, S., James, J., Espinosa-Anke, L. &amp; Schockaert, S. "RAGAS: Automated Evaluation of Retrieval Augmented Generation." EACL 2024. <a href="https://arxiv.org/abs/2309.15217" target="_blank" rel="noopener">arXiv:2309.15217</a></li>
+    <li id="ref-3">Stanford &amp; Carnegie Mellon University. "Hybrid AI Teams Beat Fully Autonomous Agents by 68.7%." Nov 2025. 48 professionals, 16 tasks, 287 occupations. <a href="https://edrm.net/2025/11/the-new-stanford-carnegie-study-hybrid-ai-teams-beat-fully-autonomous-agents-by-68-7/" target="_blank" rel="noopener">edrm.net</a></li>
+    <li id="ref-4">BaFin. "Guidance on ICT Risks in the Use of AI at Financial Entities." Dec 2025 (35pp). <a href="https://www.bafin.de/SharedDocs/Downloads/EN/Anlage/neu/dl_Anlage_orientierungshilfe_IKT_Risiken_bei_KI_en.html" target="_blank" rel="noopener">bafin.de</a></li>
+    <li id="ref-5">EU AI Act (Regulation 2024/1689). Annex III, Point 5(b): creditworthiness assessment classified as high-risk. Art. 6(3): derogation for narrow procedural tasks. <a href="https://artificialintelligenceact.eu/annex/3" target="_blank" rel="noopener">artificialintelligenceact.eu</a>. See also: EBA, "AI Act implications for the EU banking sector," Nov 2025. <a href="https://www.eba.europa.eu/sites/default/files/2025-11/d8b999ce-a1d9-4964-9606-971bbc2aaf89/AI%20Act%20implications%20for%20the%20EU%20banking%20sector.pdf" target="_blank" rel="noopener">eba.europa.eu (PDF)</a></li>
+    <li id="ref-6">DORA &mdash; Digital Operational Resilience Act (EU Regulation 2022/2554). Applied from Jan 2025. <a href="https://eur-lex.europa.eu/legal-content/en/TXT/?uri=CELEX:32022R2554" target="_blank" rel="noopener">eur-lex.europa.eu</a></li>
+    <li id="ref-7">GDPR (Regulation 2016/679), Article 22 &mdash; Automated individual decision-making. <a href="https://gdpr.org/regulation/article-22.html" target="_blank" rel="noopener">gdpr.org</a>. DPIA requirements per Articles 35-36.</li>
+    <li id="ref-8">NIST AI Risk Management Framework (AI 100-1), Jan 2023. Core functions: Govern, Map, Measure, Manage. <a href="https://nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">nist.gov</a>. Generative AI Profile (AI 600-1), Jul 2024. <a href="https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf" target="_blank" rel="noopener">nvlpubs.nist.gov (PDF)</a></li>
+    <li id="ref-9">Intercom. "CX Score" &mdash; composite quality metric covering all conversations (AI + human). <a href="https://www.intercom.com/help/en/articles/10495092-understand-customer-experience-at-scale-with-the-customer-experience-cx-score" target="_blank" rel="noopener">intercom.com</a>. "A Testing Framework for AI Agents." <a href="https://www.intercom.com/campaigns/ai-agent-testing-framework" target="_blank" rel="noopener">intercom.com</a></li>
+    <li id="ref-10">HaluMap: NLI-based hallucination detection (ACL 2025 Findings). <a href="https://aclanthology.org/2025.findings-acl.96" target="_blank" rel="noopener">aclanthology.org</a>. ORION: retrieval + NLI framework, F1=0.83. <a href="https://arxiv.org/abs/2504.15771" target="_blank" rel="noopener">arXiv:2504.15771</a>. LLM-as-Judge biases: JudgeBench. <a href="https://arxiv.org/abs/2410.12784" target="_blank" rel="noopener">arXiv:2410.12784</a></li>
+    <li id="ref-11">Customer support cost benchmarks: ~$6 per live chat interaction (in-house). SumGenius, "AI Customer Service Cost Calculator," 2025. <a href="https://sumgenius.ai/blog/ai-customer-service-cost-calculator-2025/" target="_blank" rel="noopener">sumgenius.ai</a>. MatrixFlows, "Support Cost Benchmarks," 2026. <a href="https://www.matrixflows.com/blog/support-cost-benchmarks-self-service-vs-assisted" target="_blank" rel="noopener">matrixflows.com</a></li>
+    <li id="ref-12">Intercom, "AI Agent Blueprint" &mdash; support AI maturity model. <a href="https://fin.ai/blueprint/introducing-ai-agents" target="_blank" rel="noopener">fin.ai</a></li>
+  </ol>
+</section>
+
 <footer>
-  Built by Pavel Andreyeuski &middot; Scalable Capital AI Platform PM Assignment &middot; February 2026
+  Built by Pasha Andrzejewski &middot; Scalable Capital AI Platform PM Assignment &middot; February 2026
 </footer>
 
 <script>
 // Password gate (shared verification token with demo.html)
-const ENCRYPTED_VERIFY = 'Is3lUgXd6gFeJtcpeqf1ZhJYlf2YcWGxIEgqXe7PoQUymcHNvJ7dJmeBK89X6asgen0lbgqTyiOotQHdYKvUqzdU';
+const ENCRYPTED_VERIFY = 'ns6oL3G0Z7b7DVB9kOZ1A1jx/Aqit8D3RkhDNuYwArkqaUyKDvTqihLgH4MaLWq4+SBTk9fSJZOi0or5MyIShZvg';
 
 async function decryptAES(encB64, password) {
   const raw = Uint8Array.from(atob(encB64), c => c.charCodeAt(0));
@@ -693,6 +824,12 @@ async function unlockPage() {
   }
   document.getElementById('pwInput').focus();
 })();
+
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
 
 window.addEventListener('scroll', () => {
   const h = document.documentElement.scrollHeight - window.innerHeight;

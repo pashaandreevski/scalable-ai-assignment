@@ -24,9 +24,9 @@
 **Big Job:** **I want** my money to grow on autopilot without requiring my attention, **so that** I can focus on my career and life while building long-term wealth.
 
 **TAM / SAM / SOM:**
-- TAM: ~15M retail investors with recurring investment plans in the EU (Eurozone broker accounts with savings plans)
-- SAM: ~1.5M Scalable Capital clients; ~60% have active savings plans = ~900K users
-- SOM: ~270K users/year who experience at least one failed execution or savings plan issue (estimate: 30% of active savings plan users encounter an issue annually)
+- TAM: ~15M retail investors with recurring investment plans in the EU *[assumption: ~30% of ~50M EU retail brokerage accounts have active savings plans, per Eurozone broker data]*
+- SAM: ~1.5M Scalable Capital clients *[public figure, 2024]*; ~60% have active savings plans = ~900K users *[assumption: based on Scalable's product emphasis on savings plans]*
+- SOM: ~270K users/year who experience at least one failed execution or savings plan issue *[assumption: 30% annual incident rate among active savings plan users; industry benchmark for payment failures is 5-15%, higher for savings plans due to variable cash balance]*
 
 **Why this segment is attractive:** Highest volume of support requests that require account context (savings plan config + cash balance). Currently escalated to human agents because the FAQ bot cannot access client data. Fixing this segment alone could shift resolution rate from 70% to 80%+. High retention value: if the savings plan breaks and the fix is frustrating, these users churn silently.
 
@@ -46,9 +46,9 @@
 **Big Job:** **I want** to trade confidently knowing the platform has my back when things go wrong, **so that** I can focus on investment decisions, not operational issues.
 
 **TAM / SAM / SOM:**
-- TAM: ~8M active retail traders in the EU
-- SAM: ~450K active Scalable Broker traders (estimate: 30% of 1.5M are active traders)
-- SOM: ~90K traders/year who contact support about order/transaction issues (estimate: 20% of active traders per year)
+- TAM: ~8M active retail traders in the EU *[assumption: based on ESMA retail trading participation estimates]*
+- SAM: ~450K active Scalable Broker traders *[assumption: 30% of 1.5M are active traders]*
+- SOM: ~90K traders/year who contact support about order/transaction issues *[assumption: 20% of active traders per year contact support]*
 
 **Why this segment is attractive:** High LTV segment (PRIME+ subscribers at EUR 4.99/month). Time-critical issues where slow support directly causes financial dissatisfaction. These users are vocal (app store reviews, social media). Fast resolution drives loyalty and NPS. Transaction data is structured and already available -- technically feasible for AI to diagnose.
 
@@ -68,9 +68,9 @@
 **Big Job:** **I want** to start investing without feeling stupid or making costly mistakes, **so that** I can join the world of investing and build a better financial future.
 
 **TAM / SAM / SOM:**
-- TAM: ~25M Europeans aged 20-35 who haven't started investing but want to
-- SAM: ~200K new Scalable sign-ups per year (estimated)
-- SOM: ~120K new users/year who contact support during onboarding (estimate: 60% of new sign-ups have at least one support interaction)
+- TAM: ~25M Europeans aged 20-35 who haven't started investing but want to *[assumption: ~20% of 125M EU population in age group, per Eurobarometer financial inclusion surveys]*
+- SAM: ~200K new Scalable sign-ups per year *[assumption: based on growth from 1M to 1.5M clients in ~18 months]*
+- SOM: ~120K new users/year who contact support during onboarding *[assumption: 60% of new sign-ups have at least one support interaction; industry onboarding drop-off rate is 40-70%]*
 
 **Why this segment is attractive:** Highest volume segment overall. First impression defines retention: if onboarding support is poor, these users never make their first investment. Current FAQ bot handles basic questions but cannot see the user's onboarding state. AI with account context can see "verification pending since 3 days" and proactively guide. Conversion from sign-up to first investment is a key business metric.
 
@@ -90,9 +90,9 @@
 **Big Job:** **I want** to handle my investment taxes correctly and effortlessly, **so that** I don't face problems with the Finanzamt and can keep as much of my returns as possible.
 
 **TAM / SAM / SOM:**
-- TAM: ~10M German retail investors who file taxes on investment income
-- SAM: ~1M Scalable Capital German clients
-- SOM: ~400K clients/year who access tax documents or contact support about tax topics (seasonal spike Jan-May)
+- TAM: ~10M German retail investors who file taxes on investment income *[assumption: ~12% of German population holds securities, per Deutsches Aktieninstitut 2024]*
+- SAM: ~1M Scalable Capital German clients *[assumption: ~67% of 1.5M clients are Germany-based]*
+- SOM: ~400K clients/year who access tax documents or contact support about tax topics *[assumption: 40% of German clients need tax support; seasonal spike Jan-May]*
 
 **Why this segment is attractive:** Massive seasonal volume spike that currently overwhelms support. Tax questions require client-specific data (portfolio, transactions, tax documents) that the FAQ bot cannot access. High stakes: incorrect tax information damages trust irreversibly. AI with access to the client's tax document status and portfolio can handle 80%+ of these queries. Compliance advantage: AI can always include proper disclaimers.
 
@@ -112,9 +112,9 @@
 **Big Job:** **I want** to feel that my broker respects me and my money, **so that** I can trust them with my financial future.
 
 **TAM / SAM / SOM:**
-- TAM: ~5M EU retail investors who switched brokers in the past 2 years
-- SAM: ~75K Scalable clients at risk of churning annually (estimate: 5% of 1.5M)
-- SOM: ~30K clients/year who contact support in a pre-churn state (repeat contacts, negative CSAT)
+- TAM: ~5M EU retail investors who switched brokers in the past 2 years *[assumption: based on neobroker industry churn benchmarks of 10-15% annually]*
+- SAM: ~75K Scalable clients at risk of churning annually *[assumption: 5% annual churn rate]*
+- SOM: ~30K clients/year who contact support in a pre-churn state *[assumption: 40% of at-risk clients exhibit repeat contact + negative CSAT patterns]*
 
 **Why this segment is attractive:** Highest financial impact per interaction. Preventing one churn saves the full LTV (PRIME+: ~EUR 60/year, potential AUM fees on wealth management). AI with context can detect the pattern (repeated contacts, escalation history) and prioritize accordingly. Retention is far cheaper than acquisition. An empathetic, context-aware agent that acknowledges past issues and resolves quickly can reverse churn intent.
 
@@ -265,10 +265,12 @@ Sebastian explicitly described this evolution in the interview: "We started with
 **Impact (I): 5** — Without client data access, there's no differentiation from the current FAQ bot. The entire concept is dead.
 
 **Validation methods:**
-1. Workshop with DPO + Legal in week 1: present data access scope, get preliminary yes/no
-2. Review existing data processing agreements for the current support chat — what's already approved?
-3. Benchmark: how did Fundrise, Sharesies, MONY Group get compliance approval for their AI agents? (Intercom case studies)
-4. Propose a minimal first scope: read-only access to savings plan status (no full portfolio) as a compliant starting point
+1. Workshop with DPO + Legal in week 1: present data access scope, get preliminary yes/no *(1 day, €0, internal meeting)*
+2. Review existing data processing agreements for the current support chat — what's already approved? *(2 days, €0, desk research)*
+3. Benchmark: how did Fundrise, Sharesies, MONY Group get compliance approval for their AI agents? (Intercom case studies) *(3 days, €0, desk research + outreach)*
+4. Propose a minimal first scope: read-only access to savings plan status (no full portfolio) as a compliant starting point *(1 day, €0, PRD draft)*
+
+**Total validation cost: ~1 week, €0** — All internal activities
 
 **Score: P(3) x I(5) = 15** — Rank #1
 
@@ -287,10 +289,12 @@ Sebastian explicitly described this evolution in the interview: "We started with
 **Impact (I): 5** — Financial hallucination = regulatory risk + client financial harm + reputational damage. A single viral social media post about "Scalable's AI told me I had EUR 5,000 when I had EUR 500" could be devastating.
 
 **Validation methods:**
-1. Build golden test set of 200+ savings plan scenarios with known-correct answers; measure hallucination rate
-2. A/B test with internal support agents: AI generates draft answers, humans verify before sending
-3. Implement confidence scoring: responses below threshold auto-escalate to human
-4. Run red-team testing: adversarial prompts designed to elicit hallucinated financial data
+1. Build golden test set of 200+ savings plan scenarios with known-correct answers; measure hallucination rate *(2 weeks, ~€2K API costs, requires 1 ML engineer + 1 support agent for labeling)*
+2. A/B test with internal support agents: AI generates draft answers, humans verify before sending *(3 weeks, €0 incremental, 5 support agents beta testers)*
+3. Implement confidence scoring: responses below threshold auto-escalate to human *(1 week engineering, €0)*
+4. Run red-team testing: adversarial prompts designed to elicit hallucinated financial data *(1 week, €500 API costs, 2 engineers)*
+
+**Total validation cost: ~4-5 weeks, ~€2.5K** — Can run experiments 1+3+4 in parallel
 
 **Score: P(3) x I(5) = 15** — Rank #2
 
@@ -309,10 +313,12 @@ Sebastian explicitly described this evolution in the interview: "We started with
 **Impact (I): 3** — The feature still provides value (diagnosis alone improves CX). But the ROI case for action capability weakens significantly if adoption is below 40%. It's a delayed impact, not a project-killer.
 
 **Validation methods:**
-1. Prototype test (this POC): show the confirmation flow to 10-15 Scalable clients, measure willingness
-2. Internal beta: deploy action capability to support agents first, let agents trigger actions with client on the phone
-3. A/B test: offer AI actions vs. "I'll connect you to an agent who can do this" — measure preference
-4. Analyze Intercom fintech case studies for action adoption rates in similar products
+1. Prototype test (this POC): show the confirmation flow to 10-15 Scalable clients, measure willingness *(1 week, €0, user interviews via existing research panel)*
+2. Internal beta: deploy action capability to support agents first, let agents trigger actions with client on the phone *(2 weeks, €0 incremental)*
+3. A/B test: offer AI actions vs. "I'll connect you to an agent who can do this" — measure preference *(3 weeks, sample: 1K conversations)*
+4. Analyze Intercom fintech case studies for action adoption rates in similar products *(2 days, desk research)*
+
+**Total validation cost: ~3 weeks, €0** — Start with experiments 1+4, then 2→3
 
 **Score: P(3) x I(3) = 9** — Rank #3
 
@@ -331,9 +337,11 @@ Sebastian explicitly described this evolution in the interview: "We started with
 **Impact (I): 3** — Degraded experience, not a project-killer. Can be mitigated with streaming responses, loading indicators, and caching. But it does affect CSAT and resolution rate.
 
 **Validation methods:**
-1. Technical spike: measure current API response times for portfolio, savings plans, and cash balance endpoints
-2. Build a mock aggregation service that calls all three and measures total latency
-3. Benchmark: what latency does Intercom Fin achieve with CRM data injection?
+1. Technical spike: measure current API response times for portfolio, savings plans, and cash balance endpoints *(3 days, €0, 1 backend engineer)*
+2. Build a mock aggregation service that calls all three and measures total latency *(1 week, €0, 1 backend engineer)*
+3. Benchmark: what latency does Intercom Fin achieve with CRM data injection? *(1 day, desk research)*
+
+**Total validation cost: ~1.5 weeks, €0** — Experiments 1+3 in parallel, then 2
 
 **Score: P(2) x I(3) = 6** — Rank #4
 
@@ -352,10 +360,12 @@ Sebastian explicitly described this evolution in the interview: "We started with
 **Impact (I): 2** — Confusion is annoying but not catastrophic. Can be resolved through UX (routing layer, unified entry point). The underlying AI capabilities are complementary, not conflicting.
 
 **Validation methods:**
-1. UX test: show 10 users both features, ask them to classify 10 sample questions as "support" or "insights" — measure misclassification rate
-2. Analyze current Insights usage logs: how many queries are actually support requests?
-3. Prototype a unified entry point with smart routing — test whether a single "Ask" button that auto-classifies intent reduces confusion
-4. Interview Philip (support chat PM) and Insights PM about observed user confusion patterns
+1. UX test: show 10 users both features, ask them to classify 10 sample questions as "support" or "insights" — measure misclassification rate *(1 week, €0, remote interviews via UserTesting or internal panel)*
+2. Analyze current Insights usage logs: how many queries are actually support requests? *(2 days, €0, data analysis)*
+3. Prototype a unified entry point with smart routing — test whether a single "Ask" button that auto-classifies intent reduces confusion *(1 week, €0, Figma prototype + 5 user tests)*
+4. Interview Philip (support chat PM) and Insights PM about observed user confusion patterns *(2 days, €0, internal meetings)*
+
+**Total validation cost: ~2 weeks, €0** — Experiments 2+4 in parallel, then 1→3
 
 **Score: P(3) x I(2) = 6** — Rank #5
 
